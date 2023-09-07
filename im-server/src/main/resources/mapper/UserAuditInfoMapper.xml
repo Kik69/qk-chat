@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qk.chat.dao.UserAuditInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qk.chat.entity.UserAuditInfo">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="business_type" property="businessType" />
+        <result column="business_id" property="businessId" />
+        <result column="apply_time" property="applyTime" />
+        <result column="audit_time" property="auditTime" />
+        <result column="audit_user_id" property="auditUserId" />
+        <result column="apply_reason" property="applyReason" />
+        <result column="audit_reason" property="auditReason" />
+        <result column="audit_status" property="auditStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, business_type, business_id, apply_time, audit_time, audit_user_id, apply_reason, audit_reason, audit_status
+    </sql>
+
+</mapper>

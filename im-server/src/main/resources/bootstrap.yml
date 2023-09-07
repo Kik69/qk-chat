@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: qkmall-item
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        register-enabled: true
+      config:
+        server-addr: 127.0.0.1:8848
+        prefix: ${spring.application.name}
+        file-extension: yml
+  profiles:
+    active: dev
