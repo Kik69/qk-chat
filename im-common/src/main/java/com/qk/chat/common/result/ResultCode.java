@@ -1,4 +1,4 @@
-package com.qkmall.common;
+package com.qk.chat.common.result;
 
 
 /**

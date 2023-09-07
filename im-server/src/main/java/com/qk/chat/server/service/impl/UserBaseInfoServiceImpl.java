@@ -16,7 +16,7 @@ import com.qk.chat.server.dao.UserBaseInfoMapper;
 import com.qk.chat.server.domain.dto.LoginUser;
 import com.qk.chat.server.domain.param.CheckLoginParam;
 import com.qk.chat.server.domain.param.EmailRegisterParam;
-import com.qk.chat.server.service.UserInfoService;
+import com.qk.chat.server.service.UserBaseInfoService;
 import com.qk.chat.server.domain.entity.UserBaseInfo;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2023年08月27日
  */
 @Service
-public class UserInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, UserBaseInfo> implements UserInfoService {
+public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, UserBaseInfo> implements UserBaseInfoService {
     
     @Autowired
     RedisToolsUtil redisToolsUtil;

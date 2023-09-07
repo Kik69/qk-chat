@@ -14,7 +14,7 @@ import com.qk.chat.server.domain.param.EmailRegisterParam;
  * @author young
  * @since 2023年08月27日
  */
-public interface UserInfoService extends IService<UserBaseInfo> {
+public interface UserBaseInfoService extends IService<UserBaseInfo> {
     String emailRegisterService(EmailRegisterParam emailRegisterParam);
     
     String sendEmailService(String emailText);

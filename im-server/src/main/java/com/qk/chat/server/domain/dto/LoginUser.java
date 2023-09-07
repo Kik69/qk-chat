@@ -1,4 +1,4 @@
-package com.qk.chat.server.user.domain.dto;
+package com.qk.chat.server.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +21,7 @@ public class LoginUser{
     /**
      * 用户ID
      */
-    private Integer userId;
+    private String userId;
     /**
      * 用户昵称
      */

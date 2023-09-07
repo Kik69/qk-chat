@@ -1,4 +1,4 @@
-package com.qk.chat.server.redis;
+package com.qk.chat.server.config.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

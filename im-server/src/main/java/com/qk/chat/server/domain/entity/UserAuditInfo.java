@@ -1,14 +1,17 @@
-package com.qk.chat.entity;
+package com.qk.chat.server.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -22,18 +25,19 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @TableName("user_audit_info")
+@Builder
 public class UserAuditInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    @TableId(value = "id")
+    private String id;
 
     /**
      * 申请人ID
      */
     @TableField("user_id")
-    private Integer userId;
+    private String userId;
 
     /**
      * 业务类型（群或者好友ID）
@@ -45,25 +49,25 @@ public class UserAuditInfo implements Serializable {
      * 业务ID （如果是群对应群ID，如果是好友对应好友ID
      */
     @TableField("business_id")
-    private Integer businessId;
+    private String businessId;
 
     /**
      * 申请时间
      */
     @TableField("apply_time")
-    private LocalDateTime applyTime;
+    private Date applyTime;
 
     /**
      * 审核时间
      */
     @TableField("audit_time")
-    private LocalDateTime auditTime;
+    private Date auditTime;
 
     /**
      * 审核人ID
      */
     @TableField("audit_user_id")
-    private Integer auditUserId;
+    private String auditUserId;
 
     /**
      * 申请理由

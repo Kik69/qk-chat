@@ -1,4 +1,4 @@
-package com.qk.chat.server.domain.vo.param;
+package com.qk.chat.server.domain.param;
 
 import lombok.Data;
 

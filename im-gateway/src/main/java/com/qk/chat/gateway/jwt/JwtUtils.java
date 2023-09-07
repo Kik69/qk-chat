@@ -1,7 +1,5 @@
-package com.qk.chat.common.jwt;
+package com.qk.chat.gateway.jwt;
 
-import com.auth0.jwt.JWT;
-import com.qk.chat.common.constant.Constant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -27,7 +25,7 @@ public class JwtUtils {
      * @return
      */
     public static String generateToken(String uid) {
-        return Jwts.builder().setHeaderParam("type", "JWT").setSubject(Constant.SUBJECT).setIssuedAt(new Date()).claim("uid",uid)
+        return Jwts.builder().setHeaderParam("type", "JWT").setSubject("im-chat").setIssuedAt(new Date()).claim("uid",uid)
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 

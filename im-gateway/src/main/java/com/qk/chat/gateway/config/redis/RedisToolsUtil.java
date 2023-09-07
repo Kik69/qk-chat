@@ -1,4 +1,4 @@
-package com.qk.chat.server.common.redis;
+package com.qk.chat.gateway.config.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,6 +26,18 @@ public class RedisToolsUtil {
         try {
             if (time > 0){
                 redisTemplate.expire(key,time, TimeUnit.SECONDS);
+            }
+            return true;
+        }catch (Exception e){
+            log.error(e.toString(),e);
+            return false;
+        }
+    }
+
+    public boolean expire(String key,long time,TimeUnit unit){
+        try {
+            if (time > 0){
+                redisTemplate.expire(key,time, unit);
             }
             return true;
         }catch (Exception e){

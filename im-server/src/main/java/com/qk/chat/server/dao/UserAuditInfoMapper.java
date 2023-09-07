@@ -1,7 +1,7 @@
-package com.qk.chat.dao;
+package com.qk.chat.server.dao;
 
-import com.qk.chat.entity.UserAuditInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.qk.chat.server.domain.entity.UserAuditInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

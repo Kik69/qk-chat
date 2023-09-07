@@ -4,7 +4,7 @@ import com.qk.chat.common.result.CommonResult;
 import com.qk.chat.server.domain.dto.LoginUser;
 import com.qk.chat.server.domain.param.CheckLoginParam;
 import com.qk.chat.server.domain.param.EmailRegisterParam;
-import com.qk.chat.server.service.UserInfoService;
+import com.qk.chat.server.service.UserBaseInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,24 +23,24 @@ import javax.validation.constraints.NotBlank;
 @RestController
 @RequestMapping("/server/user")
 @Validated
-public class UserInfoController {
+public class UserBaseInfoController {
 
     @Autowired
-    UserInfoService userInfoService;
+    UserBaseInfoService userBaseInfoService;
 
     @PostMapping("/email-register")
     public CommonResult<String> emailRegister(@Valid @RequestBody EmailRegisterParam emailRegisterParam) {
-        return CommonResult.success(userInfoService.emailRegisterService(emailRegisterParam));
+        return CommonResult.success(userBaseInfoService.emailRegisterService(emailRegisterParam));
     }
 
     @PostMapping("/email-send")
     public CommonResult<String> sendEmail(@Email(message = "邮箱格式不正确") @NotBlank(message = "邮箱不能为空") String emailText) {
-        return CommonResult.success(userInfoService.sendEmailService(emailText));
+        return CommonResult.success(userBaseInfoService.sendEmailService(emailText));
     }
 
     @PostMapping("/email-login")
     public CommonResult<LoginUser> checkLogin(@Valid @RequestBody CheckLoginParam checkLoginParam){
-        return CommonResult.success(userInfoService.checkLoginService(checkLoginParam),"登录成功！");
+        return CommonResult.success(userBaseInfoService.checkLoginService(checkLoginParam),"登录成功！");
     }
     
     @GetMapping("/test")

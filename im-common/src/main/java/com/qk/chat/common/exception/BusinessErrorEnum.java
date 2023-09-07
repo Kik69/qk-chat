@@ -1,4 +1,4 @@
-package com.abin.mallchat.common.common.exception;
+package com.qk.chat.common.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
