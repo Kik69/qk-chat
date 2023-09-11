@@ -62,6 +62,9 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
                 if (redisToolsUtil.getExpire(emailUid) < 600){
                     redisToolsUtil.expire(emailUid,30, TimeUnit.MINUTES);
                 }
+            }else {
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                return response.writeWith(Mono.just(this.convertMsgData(response,"token已过期！")));
             }
         }catch (Exception e){
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
