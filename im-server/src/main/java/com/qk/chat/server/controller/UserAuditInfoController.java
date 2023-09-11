@@ -5,6 +5,7 @@ import com.qk.chat.server.domain.param.FindUserSecretParam;
 import com.qk.chat.server.domain.param.FriendApplyParam;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
 import com.qk.chat.server.service.UserAuditInfoService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,12 +28,14 @@ public class UserAuditInfoController {
     @Autowired
     UserAuditInfoService userAuditInfoService;
     
+    @ApiOperation("查找好友")
     @RequestMapping(value = "/find-friend",method = RequestMethod.POST)
     public CommonResult<UserFriendApplyVO> findFriend(@Valid @RequestBody FindUserSecretParam findUserSecretParam){
         return CommonResult.success(userAuditInfoService.findFriendService(findUserSecretParam));
     }
     
     @RequestMapping(value = "/apply-friend",method = RequestMethod.POST)
+    @ApiOperation("申请好友")
     public CommonResult<String> applyFriend(@Valid @RequestBody FriendApplyParam friendApplyParam){
         return CommonResult.success(userAuditInfoService.applyFriendService(friendApplyParam));
     }

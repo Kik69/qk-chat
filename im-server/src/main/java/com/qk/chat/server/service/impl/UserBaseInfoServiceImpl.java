@@ -11,8 +11,9 @@ import com.qk.chat.common.constant.Constant;
 import com.qk.chat.common.exception.BusinessException;
 import com.qk.chat.common.jwt.JwtUtils;
 import com.qk.chat.common.number.VerifyCodeUtil;
-import com.qk.chat.server.config.redis.RedisToolsUtil;
-import com.qk.chat.server.dao.UserBaseInfoMapper;
+import com.qk.chat.server.common.config.redis.RedisToolsUtil;
+import com.qk.chat.server.common.event.LoginSendCodeEvent;
+import com.qk.chat.server.mapper.UserBaseInfoMapper;
 import com.qk.chat.server.domain.dto.LoginUser;
 import com.qk.chat.server.domain.param.CheckLoginParam;
 import com.qk.chat.server.domain.param.EmailRegisterParam;
@@ -20,6 +21,7 @@ import com.qk.chat.server.service.UserBaseInfoService;
 import com.qk.chat.server.domain.entity.UserBaseInfo;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -56,6 +58,9 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
     @Autowired
     StringEncryptor stringEncryptor;
     
+    @Autowired
+    ApplicationEventPublisher applicationEventPublisher;
+    
 
     /**
      * 用户注册
@@ -79,23 +84,9 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
     @Override
     public String sendEmailService(String emailText) {
         String verifyCode = String.valueOf(redisToolsUtil.get(Constant.PREFIX_KEY_EMAIL + emailText));
-        System.out.println(Constant.PREFIX_KEY_EMAIL + emailText);
         if (TextUtil.isNull(verifyCode)){
-            String code = VerifyCodeUtil.generateVerifyCode(6);
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setSubject("im即时通讯验证码");
-            mailMessage.setText("尊敬的用户您好!\n\n感谢您注册im即时通讯。\n\n尊敬的: " + emailText + "您的校验验证码为: " + code + ",有效期5分钟，请不要把验证码信息泄露给其他人,如非本人请勿操作");
-            mailMessage.setTo(emailText);
-            try {
-                mailMessage.setFrom(new InternetAddress(MimeUtility.encodeText("im官方") + "<2901603085@qq.com>").toString());
-                javaMailSender.send(mailMessage);
-                //存入redis
-                redisToolsUtil.set(Constant.PREFIX_KEY_EMAIL + emailText,code,600);
-                return "邮件发送成功";
-            }catch (Exception e){
-                e.printStackTrace();
-                throw new BusinessException("邮件发送失败");
-            }
+            applicationEventPublisher.publishEvent(new LoginSendCodeEvent(this,emailText));
+            return "邮件发送成功";
         }
         return "验证码已发送至您的邮箱，请注意查收";
     }

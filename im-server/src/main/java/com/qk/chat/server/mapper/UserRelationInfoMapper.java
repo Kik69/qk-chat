@@ -1,7 +1,7 @@
-package com.qk.chat.server.dao;
+package com.qk.chat.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.qk.chat.server.domain.entity.UserAuditInfo;
+import com.qk.chat.server.domain.entity.UserRelationInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2023年09月05日
  */
 @Mapper
-public interface UserAuditInfoMapper extends BaseMapper<UserAuditInfo> {
+public interface UserRelationInfoMapper extends BaseMapper<UserRelationInfo> {
 
 }

@@ -1,4 +1,4 @@
-package com.qk.chat.server.config.redis;
+package com.qk.chat.server.common.config.redis;
 
 import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import org.springframework.context.annotation.Bean;
