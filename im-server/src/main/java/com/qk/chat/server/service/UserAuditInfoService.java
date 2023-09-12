@@ -6,6 +6,8 @@ import com.qk.chat.server.domain.param.FindUserSecretParam;
 import com.qk.chat.server.domain.param.FriendApplyParam;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -23,4 +25,6 @@ public interface UserAuditInfoService extends IService<UserAuditInfo> {
     UserFriendApplyVO findFriendService(FindUserSecretParam findUserSecretParam);
     
     String applyFriendService(FriendApplyParam friendApplyParam);
+
+    List<UserAuditInfo> friendListService(String userId,Integer pageNum,Integer pageSize,String keyword);
 }

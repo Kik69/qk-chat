@@ -3,6 +3,9 @@ package com.qk.chat.server.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qk.chat.server.domain.entity.UserAuditInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserAuditInfoMapper extends BaseMapper<UserAuditInfo> {
-    
+    List<UserAuditInfo> getUserAuditInfoList(@Param("userId") String userId,@Param("keyword") String keyword);
 }

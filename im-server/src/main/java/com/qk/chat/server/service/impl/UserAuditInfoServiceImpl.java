@@ -2,6 +2,7 @@ package com.qk.chat.server.service.impl;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
 import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.exception.BusinessException;
 import com.qk.chat.server.dao.UserAuditInfoDao;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -75,5 +77,11 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
                 .build();
         userAuditInfoMapper.insert(userAuditInfo);
         return "申请成功";
+    }
+
+    @Override
+    public List<UserAuditInfo> friendListService(String userId,Integer pageNum,Integer pageSize,String keyword) {
+        PageHelper.startPage(pageNum,pageSize);
+        return userAuditInfoMapper.getUserAuditInfoList(userId, keyword);
     }
 }
