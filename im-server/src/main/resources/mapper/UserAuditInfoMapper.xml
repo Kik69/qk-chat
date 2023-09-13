@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qk.chat.server.dao.UserAuditInfoMapper">
+<mapper namespace="com.qk.chat.server.mapper.UserAuditInfoMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.qk.chat.server.domain.entity.UserAuditInfo">
@@ -20,5 +20,8 @@
     <sql id="Base_Column_List">
         id, user_id, business_type, business_id, apply_time, audit_time, audit_user_id, apply_reason, audit_reason, audit_status
     </sql>
-
+    
+    <select id="getUserAuditInfoList" resultMap="BaseResultMap">
+        SELECT * FROM user_audit_info WHERE user_id = #{userId} <if test="keyword != null"> AND apply_reason LIKE '%${keyword}%' </if> 
+    </select>
 </mapper>

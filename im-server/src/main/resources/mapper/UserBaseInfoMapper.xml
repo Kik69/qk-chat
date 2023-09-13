@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qk.chat.server.dao.UserBaseInfoMapper">
+<mapper namespace="com.qk.chat.server.mapper.UserBaseInfoMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.qk.chat.server.domain.entity.UserBaseInfo">
@@ -33,4 +33,7 @@
         user_id, user_name, nick_name, email, password, gender, avatar, personal_signature, birthday, mobile, last_login_time, activate, activate_time, channel, secret_mobile, device, device_id, device_model, ip, status, gmt_create, gmt_modified
     </sql>
 
+    <select id="getUserBaseInfo" resultMap="BaseResultMap">
+        SELECT * FROM user_base_info WHERE email = #{email}
+    </select>
 </mapper>
