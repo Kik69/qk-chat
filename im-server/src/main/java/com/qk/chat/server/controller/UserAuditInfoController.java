@@ -3,6 +3,7 @@ package com.qk.chat.server.controller;
 import com.qk.chat.common.pager.CommonPage;
 import com.qk.chat.common.result.CommonResult;
 import com.qk.chat.server.domain.entity.UserAuditInfo;
+import com.qk.chat.server.domain.param.AuditApplyParam;
 import com.qk.chat.server.domain.param.FindUserSecretParam;
 import com.qk.chat.server.domain.param.FriendApplyParam;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 /**
  * {@code @ClassName} UserAuditInfoController
@@ -48,5 +48,11 @@ public class UserAuditInfoController {
                                                               @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
                                                               @RequestParam(required = false) String keyword){
         return CommonResult.success(CommonPage.restPage(userAuditInfoService.friendListService(userId, pageNum, pageSize, keyword)));
+    }
+
+    @ApiOperation("审核申请")
+    @RequestMapping(value = "/audit-apply",method = RequestMethod.POST)
+    public CommonResult auditApply(@Valid @RequestBody AuditApplyParam auditApplyParam){
+        return null;
     }
 }

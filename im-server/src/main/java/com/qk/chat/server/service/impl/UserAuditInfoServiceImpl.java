@@ -4,9 +4,12 @@ import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.inspur.plugins.common.util.TextUtil;
+import com.qk.chat.common.constant.Constant;
 import com.qk.chat.common.exception.BusinessException;
 import com.qk.chat.server.dao.UserAuditInfoDao;
 import com.qk.chat.server.dao.UserRelationInfoDao;
+import com.qk.chat.server.domain.entity.UserRelationInfo;
+import com.qk.chat.server.domain.param.AuditApplyParam;
 import com.qk.chat.server.mapper.UserAuditInfoMapper;
 import com.qk.chat.server.mapper.UserBaseInfoMapper;
 import com.qk.chat.server.domain.entity.UserAuditInfo;
@@ -14,6 +17,7 @@ import com.qk.chat.server.domain.entity.UserBaseInfo;
 import com.qk.chat.server.domain.param.FindUserSecretParam;
 import com.qk.chat.server.domain.param.FriendApplyParam;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
+import com.qk.chat.server.mapper.UserRelationInfoMapper;
 import com.qk.chat.server.service.UserAuditInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +48,9 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     
     @Autowired
     UserAuditInfoDao userAuditInfoDao;
+    
+    @Autowired
+    UserRelationInfoMapper userRelationInfoMapper;
     
     @Override
     public UserFriendApplyVO findFriendService(FindUserSecretParam findUserSecretParam) {
@@ -83,5 +90,28 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     public List<UserAuditInfo> friendListService(String userId,Integer pageNum,Integer pageSize,String keyword) {
         PageHelper.startPage(pageNum,pageSize);
         return userAuditInfoMapper.getUserAuditInfoList(userId, keyword);
+    }
+
+    @Override
+    public String auditApplyService(AuditApplyParam auditApplyParam) {
+        String auditDetail = auditApplyParam.getAuditDetail();
+        if (Constant.IS_NO.equals(auditDetail)){
+            //如果是拒绝 修改状态审核是按
+            userAuditInfoMapper.editTuenAuditStatus(auditApplyParam.getAuditUserId(),new Date(),auditApplyParam.getAuditReason());
+        }else {
+            userAuditInfoMapper.editPassAuditStatus(auditApplyParam.getAuditUserId(),new Date(),auditApplyParam.getAuditReason());
+            //增加好友关系
+            
+        }
+        return "审核成功";
+    }
+    
+    public void doCreateRelationInfo(AuditApplyParam auditApplyParam){
+        UserRelationInfo.builder().id(UUID.randomUUID().toString())
+                .userId(auditApplyParam.getAuditUserId())
+                .friendId(auditApplyParam.getFriendUserId())
+                .auditTime(new Date())
+                .applyTime(new Date())
+                .build();
     }
 }

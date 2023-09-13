@@ -22,13 +22,10 @@ import com.qk.chat.server.domain.entity.UserBaseInfo;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeUtility;
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,9 +45,6 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
     
     @Autowired
     RedisToolsUtil redisToolsUtil;
-    
-    @Resource
-    JavaMailSender javaMailSender;
     
     @Autowired
     UserBaseInfoMapper userInfoMapper;

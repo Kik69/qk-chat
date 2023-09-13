@@ -2,6 +2,7 @@ package com.qk.chat.server.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qk.chat.server.domain.entity.UserAuditInfo;
+import com.qk.chat.server.domain.param.AuditApplyParam;
 import com.qk.chat.server.domain.param.FindUserSecretParam;
 import com.qk.chat.server.domain.param.FriendApplyParam;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
@@ -27,4 +28,6 @@ public interface UserAuditInfoService extends IService<UserAuditInfo> {
     String applyFriendService(FriendApplyParam friendApplyParam);
 
     List<UserAuditInfo> friendListService(String userId,Integer pageNum,Integer pageSize,String keyword);
+    
+    String auditApplyService(AuditApplyParam auditApplyParam);
 }

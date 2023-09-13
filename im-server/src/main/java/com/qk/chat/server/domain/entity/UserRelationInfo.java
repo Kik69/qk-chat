@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -30,31 +31,31 @@ public class UserRelationInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id")
-    private Integer id;
+    private String id;
 
     /**
      * 用户ID
      */
     @TableField("user_id")
-    private Integer userId;
+    private String userId;
 
     /**
      * 朋友ID
      */
     @TableField("friend_id")
-    private Integer friendId;
+    private String friendId;
 
     /**
      * 申请时间
      */
     @TableField("apply_time")
-    private LocalDateTime applyTime;
+    private Date applyTime;
 
     /**
      * 审核时间
      */
     @TableField("audit_time")
-    private LocalDateTime auditTime;
+    private Date auditTime;
 
 
 }
