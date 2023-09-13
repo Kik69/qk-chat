@@ -101,7 +101,7 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
         }else {
             userAuditInfoMapper.editPassAuditStatus(auditApplyParam.getAuditUserId(),new Date(),auditApplyParam.getAuditReason());
             //增加好友关系
-            
+            this.doCreateRelationInfo(auditApplyParam);
         }
         return "审核成功";
     }
