@@ -52,7 +52,7 @@ public class UserAuditInfoController {
 
     @ApiOperation("审核申请")
     @RequestMapping(value = "/audit-apply",method = RequestMethod.POST)
-    public CommonResult auditApply(@Valid @RequestBody AuditApplyParam auditApplyParam){
-        return null;
+    public CommonResult<String> auditApply(@Valid @RequestBody AuditApplyParam auditApplyParam){
+        return CommonResult.success(userAuditInfoService.auditApplyService(auditApplyParam));
     }
 }

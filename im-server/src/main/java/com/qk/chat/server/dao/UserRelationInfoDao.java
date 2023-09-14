@@ -20,6 +20,6 @@ public class UserRelationInfoDao {
     JdbcTemplate jdbcTemplate;
     
     public List<UserRelationInfo> checkExistsFriendRelation(String userId, String friendId){
-        return jdbcTemplate.query("SELECT * FROM user_relation_info WHERE user_id = ? AND friend_id = ?",new BeanPropertyRowMapper<>(UserRelationInfo.class),userId,friendId);
+        return jdbcTemplate.query("SELECT * FROM user_relation_info WHERE user_id = ? AND friend_id = ?", new BeanPropertyRowMapper<>(UserRelationInfo.class), userId, friendId);
     }
 }

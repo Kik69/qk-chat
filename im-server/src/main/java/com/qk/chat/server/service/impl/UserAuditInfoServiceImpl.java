@@ -70,8 +70,8 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     @Override
     public String applyFriendService(FriendApplyParam friendApplyParam) {
         //查看是否有好友关系
-        Assert.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),friendApplyParam.getAuditId()).size() < 0,"已经是好友关系！");
-        Assert.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),friendApplyParam.getAuditId()).size() < 0,"您已发起申请！");
+        Assert.isTrue(userRelationInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),friendApplyParam.getAuditId()).size() <= 0,"已经是好友关系！");
+        Assert.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),friendApplyParam.getAuditId()).size() <= 0,"您已发起申请！");
         UserAuditInfo userAuditInfo = UserAuditInfo.builder()
                 .id(UUID.randomUUID().toString())
                 .userId(friendApplyParam.getApplyId())
@@ -94,24 +94,31 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
 
     @Override
     public String auditApplyService(AuditApplyParam auditApplyParam) {
+        Assert.isTrue(userRelationInfoDao.checkExistsFriendRelation(auditApplyParam.getAuditUserId(),auditApplyParam.getFriendUserId()).size() <= 0,"已经是好友关系！");
         String auditDetail = auditApplyParam.getAuditDetail();
-        if (Constant.IS_NO.equals(auditDetail)){
-            //如果是拒绝 修改状态审核是按
-            userAuditInfoMapper.editTuenAuditStatus(auditApplyParam.getAuditUserId(),new Date(),auditApplyParam.getAuditReason());
-        }else {
-            userAuditInfoMapper.editPassAuditStatus(auditApplyParam.getAuditUserId(),new Date(),auditApplyParam.getAuditReason());
-            //增加好友关系
-            this.doCreateRelationInfo(auditApplyParam);
+        try {
+            if (Constant.IS_NO.equals(auditDetail)){
+                //如果是拒绝 修改状态审核是按
+                userAuditInfoMapper.editTurnAuditStatus(auditApplyParam.getAuditUserId(),new Date(),auditApplyParam.getAuditReason());
+            }else {
+                userAuditInfoMapper.editPassAuditStatus(auditApplyParam.getAuditUserId(),new Date(),auditApplyParam.getAuditReason());
+                //增加好友关系
+                this.doCreateRelationInfo(auditApplyParam);
+            }
+            return "审核成功";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "审核失败";
         }
-        return "审核成功";
     }
     
     public void doCreateRelationInfo(AuditApplyParam auditApplyParam){
-        UserRelationInfo.builder().id(UUID.randomUUID().toString())
+        UserRelationInfo userRelationInfo = UserRelationInfo.builder().id(UUID.randomUUID().toString())
                 .userId(auditApplyParam.getAuditUserId())
                 .friendId(auditApplyParam.getFriendUserId())
                 .auditTime(new Date())
                 .applyTime(new Date())
                 .build();
+        userRelationInfoMapper.insert(userRelationInfo);
     }
 }
