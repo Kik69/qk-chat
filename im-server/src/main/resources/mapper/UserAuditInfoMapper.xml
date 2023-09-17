@@ -25,15 +25,12 @@
         SELECT * FROM user_audit_info WHERE user_id = #{userId} <if test="keyword != null"> AND apply_reason LIKE '%${keyword}%' </if> 
     </select>
     
-    <update id="editTuenAuditStatus">
+    <update id="editTurnAuditStatus">
         UPDATE user_audit_info SET audit_status = 2, audit_time = #{auditTime,jdbcType=DATE},audit_reason = #{auditReason} WHERE user_id = #{auditUserId}
     </update>
 
     <update id="editPassAuditStatus">
         UPDATE user_audit_info SET audit_status = 1, audit_time = #{auditTime,jdbcType=DATE},audit_reason = #{auditReason} WHERE user_id = #{auditUserId}
     </update>
-    
-    <insert id="insertRelationInfo">
-        
-    </insert>
+
 </mapper>

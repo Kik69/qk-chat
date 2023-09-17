@@ -5,7 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.Constant;
-import com.qk.chat.common.exception.BusinessException;
+import com.qk.chat.common.constant.ConstantError;
+import com.qk.chat.common.exception.Asserts;
 import com.qk.chat.server.dao.UserAuditInfoDao;
 import com.qk.chat.server.dao.UserRelationInfoDao;
 import com.qk.chat.server.domain.entity.UserRelationInfo;
@@ -55,10 +56,7 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     @Override
     public UserFriendApplyVO findFriendService(FindUserSecretParam findUserSecretParam) {
         UserBaseInfo userBaseInfo = userInfoMapper.getUserBaseInfo(findUserSecretParam.getUserIdentify());
-        
-        if (TextUtil.isNull(userBaseInfo)){
-            throw new BusinessException("查无此人，请确认邮箱是否正确！");
-        }
+        Asserts.isTrue(TextUtil.isNull(userBaseInfo), ConstantError.FIND_USER_IS_EXISTS);
         return UserFriendApplyVO.builder()
                 .userId(userBaseInfo.getUserId())
                 .nickName(userBaseInfo.getNickName())
@@ -70,8 +68,8 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     @Override
     public String applyFriendService(FriendApplyParam friendApplyParam) {
         //查看是否有好友关系
-        Assert.isTrue(userRelationInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),friendApplyParam.getAuditId()).size() <= 0,"已经是好友关系！");
-        Assert.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),friendApplyParam.getAuditId()).size() <= 0,"您已发起申请！");
+        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),friendApplyParam.getAuditId()).size() > 0, ConstantError.FIND_EXIST_USER_RELA);
+        Asserts.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),friendApplyParam.getAuditId()).size() > 0,ConstantError.NOT_IS_REPEAT_APPLY);
         UserAuditInfo userAuditInfo = UserAuditInfo.builder()
                 .id(UUID.randomUUID().toString())
                 .userId(friendApplyParam.getApplyId())
@@ -94,7 +92,7 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
 
     @Override
     public String auditApplyService(AuditApplyParam auditApplyParam) {
-        Assert.isTrue(userRelationInfoDao.checkExistsFriendRelation(auditApplyParam.getAuditUserId(),auditApplyParam.getFriendUserId()).size() <= 0,"已经是好友关系！");
+        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(auditApplyParam.getAuditUserId(),auditApplyParam.getFriendUserId()).size() > 0,ConstantError.FIND_EXIST_USER_RELA);
         String auditDetail = auditApplyParam.getAuditDetail();
         try {
             if (Constant.IS_NO.equals(auditDetail)){

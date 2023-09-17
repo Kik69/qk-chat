@@ -8,9 +8,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.Constant;
+import com.qk.chat.common.constant.ConstantError;
+import com.qk.chat.common.exception.Asserts;
 import com.qk.chat.common.exception.BusinessException;
 import com.qk.chat.common.jwt.JwtUtils;
-import com.qk.chat.common.number.VerifyCodeUtil;
 import com.qk.chat.server.common.config.redis.RedisToolsUtil;
 import com.qk.chat.server.common.event.LoginSendCodeEvent;
 import com.qk.chat.server.mapper.UserBaseInfoMapper;
@@ -63,9 +64,9 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
      */
     @Override
     public String emailRegisterService(EmailRegisterParam emailRegisterParam) {
-        Assert.isTrue(!this.checkMailExist(emailRegisterParam.getEmail()),"邮箱已经注册");
-        Assert.isTrue(emailRegisterParam.getPassword().equals(emailRegisterParam.getConfirmPassword()),"确认密码错误");
-        Assert.isTrue(this.checkEmailCode(emailRegisterParam.getEmail(),emailRegisterParam.getCaptcha()),"验证码错误");
+        Asserts.isTrue(this.checkMailExist(emailRegisterParam.getEmail()), ConstantError.MAILBOX_EXISTS_REGISTER);
+        Asserts.isTrue(!emailRegisterParam.getPassword().equals(emailRegisterParam.getConfirmPassword()),ConstantError.VERIFY_PASS_FAULT);
+        Asserts.isTrue(!this.checkEmailCode(emailRegisterParam.getEmail(),emailRegisterParam.getCaptcha()),ConstantError.VERIFY_CODE_FAULT);
         this.doRegister(emailRegisterParam);
         return "注册成功";
     }
@@ -93,8 +94,8 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
     @Override
     public LoginUser checkLoginService(CheckLoginParam checkLoginParam) {
         UserBaseInfo userInfo = this.getUserInfo(checkLoginParam.getEmail());
-        Assert.isTrue(this.checkMailExist(checkLoginParam.getEmail()),"用户名或密码错误");
-        Assert.isTrue(stringEncryptor.decrypt(userInfo.getPassword()).equals(checkLoginParam.getPassword()),"用户名或密码错误");
+        Asserts.isTrue(!this.checkMailExist(checkLoginParam.getEmail()),ConstantError.USER_ERROR);
+        Asserts.isTrue(!stringEncryptor.decrypt(userInfo.getPassword()).equals(checkLoginParam.getPassword()),ConstantError.USER_ERROR);
         String token = JwtUtils.generateToken(Constant.PREFIX_UID + checkLoginParam.getEmail());
         //存入redis 设置过期时间
         redisToolsUtil.set(Constant.PREFIX_UID + checkLoginParam.getEmail(),token,30,TimeUnit.MINUTES);
@@ -154,7 +155,7 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
             userInfoMapper.insert(userInfo);
         }catch (Exception e) {
             e.printStackTrace();
-            throw new BusinessException("系统内部异常，请联系管理员处理");
+            throw new BusinessException(ConstantError.VERIFY_CODE_FAULT);
         }
     }
 }

@@ -54,10 +54,11 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
             return response.writeWith(Mono.just(this.convertMsgData(response,"请登录")));
         }
         try {
-            Claims claimByToken = JwtUtils.getClaimByToken(token.substring("Bearer ".length()));
+            String subToken = token.substring("Bearer ".length());
+            Claims claimByToken = JwtUtils.getClaimByToken(subToken);
             String emailUid = claimByToken.get("uid") + "";
             String redisToken = redisToolsUtil.get(emailUid) + "";
-            if (TextUtil.isNotNull(redisToken)){
+            if (TextUtil.isNotNull(redisToken) && subToken.equals(redisToken)){
                 //获取过期时间
                 if (redisToolsUtil.getExpire(emailUid) < 600){
                     redisToolsUtil.expire(emailUid,30, TimeUnit.MINUTES);

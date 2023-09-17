@@ -1,7 +1,7 @@
 package com.qk.chat.server.common.event.listener;
 
-import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.Constant;
+import com.qk.chat.common.constant.ConstantError;
 import com.qk.chat.common.exception.BusinessException;
 import com.qk.chat.common.number.VerifyCodeUtil;
 import com.qk.chat.server.common.config.redis.RedisToolsUtil;
@@ -50,7 +50,7 @@ public class LoginSendCodeListener implements ApplicationListener<LoginSendCodeE
             redisToolsUtil.set(Constant.PREFIX_KEY_EMAIL + emailText,code,600);
         }catch (Exception e){
             e.printStackTrace();
-            throw new BusinessException("邮件发送失败");
+            throw new BusinessException(ConstantError.SYSTEM_ERROR);
         }
     }
     

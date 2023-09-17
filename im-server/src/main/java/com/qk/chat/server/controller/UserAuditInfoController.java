@@ -1,5 +1,6 @@
 package com.qk.chat.server.controller;
 
+import com.qk.chat.common.exception.BusinessException;
 import com.qk.chat.common.pager.CommonPage;
 import com.qk.chat.common.result.CommonResult;
 import com.qk.chat.server.domain.entity.UserAuditInfo;
@@ -31,7 +32,7 @@ public class UserAuditInfoController {
     
     @ApiOperation("查找好友")
     @RequestMapping(value = "/find-friend",method = RequestMethod.POST)
-    public CommonResult<UserFriendApplyVO> findFriend(@Valid @RequestBody FindUserSecretParam findUserSecretParam){
+    public CommonResult<UserFriendApplyVO> findFriend(@Valid @RequestBody FindUserSecretParam findUserSecretParam) {
         return CommonResult.success(userAuditInfoService.findFriendService(findUserSecretParam));
     }
 
@@ -42,7 +43,7 @@ public class UserAuditInfoController {
     }
     
     @ApiOperation("申请列表")
-    @RequestMapping(value = "/friend-list",method = RequestMethod.POST)
+        @RequestMapping(value = "/friend-list",method = RequestMethod.POST)
     public CommonResult<CommonPage<UserAuditInfo>> friendList(@NotBlank(message = "用户ID不为空") String userId,
                                                               @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
                                                               @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
