@@ -1,7 +1,7 @@
 package com.qk.chat.server.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qk.chat.common.exception.BusinessException;
+import com.qk.chat.server.common.exception.BusinessException;
 import com.qk.chat.server.domain.entity.UserAuditInfo;
 import com.qk.chat.server.domain.param.AuditApplyParam;
 import com.qk.chat.server.domain.param.FindUserSecretParam;
@@ -24,7 +24,7 @@ public interface UserAuditInfoService extends IService<UserAuditInfo> {
      * @param findUserSecretParam
      * @return
      */
-    UserFriendApplyVO findFriendService(FindUserSecretParam findUserSecretParam) throws BusinessException;
+    UserFriendApplyVO findFriendService(FindUserSecretParam findUserSecretParam);
     
     String applyFriendService(FriendApplyParam friendApplyParam);
 

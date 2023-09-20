@@ -12,6 +12,7 @@
         <module>im-server</module>
         <module>im-common</module>
         <module>im-gateway</module>
+        <module>im-interceptor</module>
     </modules>
 
     <properties>

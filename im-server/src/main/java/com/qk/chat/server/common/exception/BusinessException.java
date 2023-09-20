@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.qk.chat.common.exception;
+package com.qk.chat.server.common.exception;
 
 
 import com.qk.chat.common.constant.Constant;

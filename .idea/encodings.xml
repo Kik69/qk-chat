@@ -5,12 +5,16 @@
     <file url="file://$PROJECT_DIR$/contact/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/im-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/im-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/im-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/im-generator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/im-interceptor/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/im-redis/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/im-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/im-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/im/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/im/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../../hd_mavendata/m2Repository/org/springframework/boot/spring-boot-starter-parent/2.6.7/src/main/resources" charset="UTF-8" />
   </component>
 </project>

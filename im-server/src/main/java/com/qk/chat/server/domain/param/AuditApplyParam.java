@@ -15,9 +15,6 @@ public class AuditApplyParam {
     @NotBlank(message = "审核结果不为空")
     private String auditDetail;
     
-    @NotBlank(message = "审核人ID")
-    private String auditUserId;
-    
     @NotBlank(message = "申请人ID")
     private String friendUserId;
     

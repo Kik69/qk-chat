@@ -1,8 +1,7 @@
 package com.qk.chat.server.controller;
 
-import com.qk.chat.common.exception.BusinessException;
-import com.qk.chat.common.pager.CommonPage;
 import com.qk.chat.common.result.CommonResult;
+import com.qk.chat.server.common.pager.CommonPage;
 import com.qk.chat.server.domain.entity.UserAuditInfo;
 import com.qk.chat.server.domain.param.AuditApplyParam;
 import com.qk.chat.server.domain.param.FindUserSecretParam;

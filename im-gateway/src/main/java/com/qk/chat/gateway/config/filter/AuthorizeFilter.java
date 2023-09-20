@@ -3,7 +3,7 @@ package com.qk.chat.gateway.config.filter;
 import com.alibaba.fastjson.JSON;
 import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.gateway.config.redis.RedisToolsUtil;
-import com.qk.chat.gateway.jwt.JwtUtils;
+import com.qk.chat.common.jwt.JwtUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

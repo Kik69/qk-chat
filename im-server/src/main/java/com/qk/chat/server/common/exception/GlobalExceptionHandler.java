@@ -1,4 +1,4 @@
-package com.qk.chat.common.exception;
+package com.qk.chat.server.common.exception;
 
 import com.qk.chat.common.result.CommonResult;
 import com.qk.chat.common.result.ResultCode;

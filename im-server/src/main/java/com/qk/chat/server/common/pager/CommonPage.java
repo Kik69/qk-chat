@@ -1,4 +1,4 @@
-package com.qk.chat.common.pager;
+package com.qk.chat.server.common.pager;
 
 import com.github.pagehelper.PageInfo;
 

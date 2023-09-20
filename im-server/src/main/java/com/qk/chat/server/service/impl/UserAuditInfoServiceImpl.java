@@ -1,12 +1,12 @@
 package com.qk.chat.server.service.impl;
 
-import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.Constant;
 import com.qk.chat.common.constant.ConstantError;
-import com.qk.chat.common.exception.Asserts;
+
+import com.qk.chat.server.common.exception.Asserts;
 import com.qk.chat.server.dao.UserAuditInfoDao;
 import com.qk.chat.server.dao.UserRelationInfoDao;
 import com.qk.chat.server.domain.entity.UserRelationInfo;
@@ -20,6 +20,8 @@ import com.qk.chat.server.domain.param.FriendApplyParam;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
 import com.qk.chat.server.mapper.UserRelationInfoMapper;
 import com.qk.chat.server.service.UserAuditInfoService;
+import com.qk.chat.web.context.LoginUserInfo;
+import com.qk.chat.web.context.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,14 +94,15 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
 
     @Override
     public String auditApplyService(AuditApplyParam auditApplyParam) {
-        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(auditApplyParam.getAuditUserId(),auditApplyParam.getFriendUserId()).size() > 0,ConstantError.FIND_EXIST_USER_RELA);
+        LoginUserInfo loginToken = ThreadContext.getLoginToken();
+        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(loginToken.getUserId(),auditApplyParam.getFriendUserId()).size() > 0,ConstantError.FIND_EXIST_USER_RELA);
         String auditDetail = auditApplyParam.getAuditDetail();
         try {
             if (Constant.IS_NO.equals(auditDetail)){
                 //如果是拒绝 修改状态审核是按
-                userAuditInfoMapper.editTurnAuditStatus(auditApplyParam.getAuditUserId(),new Date(),auditApplyParam.getAuditReason());
+                userAuditInfoMapper.editTurnAuditStatus(loginToken.getUserId(),new Date(),auditApplyParam.getAuditReason());
             }else {
-                userAuditInfoMapper.editPassAuditStatus(auditApplyParam.getAuditUserId(),new Date(),auditApplyParam.getAuditReason());
+                userAuditInfoMapper.editPassAuditStatus(loginToken.getUserId(),new Date(),auditApplyParam.getAuditReason());
                 //增加好友关系
                 this.doCreateRelationInfo(auditApplyParam);
             }
@@ -112,7 +115,7 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     
     public void doCreateRelationInfo(AuditApplyParam auditApplyParam){
         UserRelationInfo userRelationInfo = UserRelationInfo.builder().id(UUID.randomUUID().toString())
-                .userId(auditApplyParam.getAuditUserId())
+                .userId(ThreadContext.getLoginToken().getUserId())
                 .friendId(auditApplyParam.getFriendUserId())
                 .auditTime(new Date())
                 .applyTime(new Date())

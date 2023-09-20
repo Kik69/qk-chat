@@ -1,7 +1,6 @@
 package com.qk.chat.server.service.impl;
 
 import cn.hutool.core.date.DateTime;
-import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.UUID;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,11 +8,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.Constant;
 import com.qk.chat.common.constant.ConstantError;
-import com.qk.chat.common.exception.Asserts;
-import com.qk.chat.common.exception.BusinessException;
 import com.qk.chat.common.jwt.JwtUtils;
 import com.qk.chat.server.common.config.redis.RedisToolsUtil;
 import com.qk.chat.server.common.event.LoginSendCodeEvent;
+import com.qk.chat.server.common.exception.Asserts;
+import com.qk.chat.server.common.exception.BusinessException;
 import com.qk.chat.server.mapper.UserBaseInfoMapper;
 import com.qk.chat.server.domain.dto.LoginUser;
 import com.qk.chat.server.domain.param.CheckLoginParam;
@@ -23,10 +22,8 @@ import com.qk.chat.server.domain.entity.UserBaseInfo;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.HashMap;
@@ -96,7 +93,7 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
         UserBaseInfo userInfo = this.getUserInfo(checkLoginParam.getEmail());
         Asserts.isTrue(!this.checkMailExist(checkLoginParam.getEmail()),ConstantError.USER_ERROR);
         Asserts.isTrue(!stringEncryptor.decrypt(userInfo.getPassword()).equals(checkLoginParam.getPassword()),ConstantError.USER_ERROR);
-        String token = JwtUtils.generateToken(Constant.PREFIX_UID + checkLoginParam.getEmail());
+        String token = JwtUtils.generateToken(Constant.PREFIX_UID + checkLoginParam.getEmail(),userInfo.getUserId());
         //存入redis 设置过期时间
         redisToolsUtil.set(Constant.PREFIX_UID + checkLoginParam.getEmail(),token,30,TimeUnit.MINUTES);
         HashMap<String, Object> hashMap = new HashMap<>();

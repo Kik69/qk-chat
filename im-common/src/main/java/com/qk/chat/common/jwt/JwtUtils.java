@@ -1,6 +1,5 @@
 package com.qk.chat.common.jwt;
 
-import com.auth0.jwt.JWT;
 import com.qk.chat.common.constant.Constant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -26,8 +25,11 @@ public class JwtUtils {
      * @param uid
      * @return
      */
-    public static String generateToken(String uid) {
-        return Jwts.builder().setHeaderParam("type", "JWT").setSubject(Constant.SUBJECT).setIssuedAt(new Date()).claim("uid",uid)
+    public static String generateToken(String uid,String userId) {
+        return Jwts.builder().setHeaderParam("type", "JWT")
+                .setSubject(Constant.SUBJECT).setIssuedAt(new Date())
+                .claim("uid",uid)
+                .claim("userId",userId)
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
