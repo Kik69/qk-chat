@@ -10,6 +10,8 @@ public enum ConstantError implements ErrorSupport{
     FIND_USER_IS_EXISTS(false,GlobalModule.GLOBAL,"01","查无此人，请确认邮箱是否正确!"),
     
     FIND_EXIST_USER_RELA(false,GlobalModule.GLOBAL,"01","已经是好友关系!"),
+    NOT_EXIST_FRIEND_RELA(false,GlobalModule.GLOBAL,"01","not exists friend relation!"),
+    NOT_ADD_ONESELF_FRIEND(false,GlobalModule.GLOBAL,"01","不能添加自己!"),
     
     NOT_IS_REPEAT_APPLY(false,GlobalModule.GLOBAL,"01","请不要重复申请!"),
     

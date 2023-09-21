@@ -16,5 +16,9 @@
         id, user_id, friend_id, apply_time, audit_time
     </sql>
     
+    <delete id="deleteFriend">
+        DELETE FROM user_relation_info WHERE user_id = #{userId} AND friend_id = #{friendId} 
+    </delete>
+    
 
 </mapper>

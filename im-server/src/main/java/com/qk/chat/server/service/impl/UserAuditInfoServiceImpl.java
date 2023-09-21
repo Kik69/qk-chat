@@ -6,11 +6,13 @@ import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.Constant;
 import com.qk.chat.common.constant.ConstantError;
 
+import com.qk.chat.common.constant.GlobalModule;
 import com.qk.chat.server.common.exception.Asserts;
 import com.qk.chat.server.dao.UserAuditInfoDao;
 import com.qk.chat.server.dao.UserRelationInfoDao;
 import com.qk.chat.server.domain.entity.UserRelationInfo;
 import com.qk.chat.server.domain.param.AuditApplyParam;
+import com.qk.chat.server.domain.param.DeleteFriendParam;
 import com.qk.chat.server.mapper.UserAuditInfoMapper;
 import com.qk.chat.server.mapper.UserBaseInfoMapper;
 import com.qk.chat.server.domain.entity.UserAuditInfo;
@@ -69,15 +71,16 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
 
     @Override
     public boolean applyFriendService(String userId,FriendApplyParam friendApplyParam) {
-        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),userId).size() > 0, ConstantError.FIND_EXIST_USER_RELA);
-        Asserts.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),userId).size() > 0,ConstantError.NOT_IS_REPEAT_APPLY);
+        Asserts.isTrue(userId.equals(friendApplyParam.getAuditId()),ConstantError.NOT_ADD_ONESELF_FRIEND);
+        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(friendApplyParam.getAuditId(),userId).size() > 0, ConstantError.FIND_EXIST_USER_RELA);
+        Asserts.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendApplyParam.getAuditId(),userId).size() > 0,ConstantError.NOT_IS_REPEAT_APPLY);
         UserAuditInfo userAuditInfo = UserAuditInfo.builder()
                 .id(UUID.randomUUID().toString())
-                .userId(friendApplyParam.getApplyId())
+                .userId(userId)
                 .businessType(friendApplyParam.getBusinessType())
-                .businessId(userId)
+                .businessId(friendApplyParam.getAuditId())
                 .applyTime(new Date())
-                .auditUserId(userId)
+                .auditUserId(friendApplyParam.getAuditId())
                 .applyReason(friendApplyParam.getApplyReason())
                 .auditStatus(0)
                 .build();
@@ -101,7 +104,7 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
             }
             if (Constant.IS_YES.equals(auditApplyParam.getAuditDetail())){
                 userAuditInfoMapper.editPassAuditStatus(userId,new Date(),auditApplyParam.getAuditReason());
-                this.doCreateRelationInfo(auditApplyParam);
+                this.doCreateRelationInfo(userId,auditApplyParam);
             }
             return true;
         }catch (Exception e){
@@ -109,14 +112,33 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
             return false;
         }
     }
-    
-    public void doCreateRelationInfo(AuditApplyParam auditApplyParam){
-        UserRelationInfo userRelationInfo = UserRelationInfo.builder().id(UUID.randomUUID().toString())
-                .userId(ThreadContext.getLoginToken().getUserId())
+
+    @Override
+    public boolean deleteFriendService(String userId, DeleteFriendParam deleteFriendParam) {
+        //判断是否存在好友关系
+        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(userId,deleteFriendParam.getFriendUserId()).size() < 1, ConstantError.NOT_EXIST_FRIEND_RELA);
+        if (userRelationInfoMapper.deleteFriend(userId,deleteFriendParam.getFriendUserId())){
+            return true;
+        }
+        return false;
+    }
+
+    public void doCreateRelationInfo(String userId,AuditApplyParam auditApplyParam){
+        UserRelationInfo userRelationInfo1 = UserRelationInfo.builder()
+                .id(UUID.randomUUID().toString())
+                .userId(userId)
                 .friendId(auditApplyParam.getFriendUserId())
                 .auditTime(new Date())
                 .applyTime(new Date())
                 .build();
-        userRelationInfoMapper.insert(userRelationInfo);
+        UserRelationInfo userRelationInfo2 = UserRelationInfo.builder()
+                .id(UUID.randomUUID().toString())
+                .userId(auditApplyParam.getFriendUserId())
+                .friendId(userId)
+                .auditTime(new Date())
+                .applyTime(new Date())
+                .build();
+        userRelationInfoMapper.insert(userRelationInfo1);
+        userRelationInfoMapper.insert(userRelationInfo2);
     }
 }

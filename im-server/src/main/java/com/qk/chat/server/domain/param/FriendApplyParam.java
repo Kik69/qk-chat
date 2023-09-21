@@ -15,8 +15,8 @@ import java.util.Date;
 @Data
 @Builder
 public class FriendApplyParam {
-    @NotBlank(message = "申请人不为空")
-    private String applyId;
+    @NotBlank(message = "审核人不为空")
+    private String auditId;
     @NotBlank(message = "业务类型不为空")
     private String businessType;
     @NotBlank(message = "业务ID不为空")

@@ -3,6 +3,7 @@ package com.qk.chat.server.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qk.chat.server.domain.entity.UserRelationInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -14,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserRelationInfoMapper extends BaseMapper<UserRelationInfo> {
-
+    boolean deleteFriend(@Param("userId") String userId,@Param("friendId") String friendId);
 }

@@ -4,6 +4,7 @@ import com.qk.chat.common.result.CommonResult;
 import com.qk.chat.server.common.pager.CommonPage;
 import com.qk.chat.server.domain.entity.UserAuditInfo;
 import com.qk.chat.server.domain.param.AuditApplyParam;
+import com.qk.chat.server.domain.param.DeleteFriendParam;
 import com.qk.chat.server.domain.param.FindUserSecretParam;
 import com.qk.chat.server.domain.param.FriendApplyParam;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
@@ -58,5 +59,11 @@ public class UserAuditInfoController {
     public CommonResult<Boolean> auditApply(@Valid @RequestBody AuditApplyParam auditApplyParam) {
         LoginUserInfo loginToken = ThreadContext.getLoginToken();
         return CommonResult.success(userAuditInfoService.auditApplyService(loginToken.getUserId(), auditApplyParam));
+    }
+
+    @ApiOperation("删除好友")
+    @RequestMapping(value = "/delete-friend", method = RequestMethod.POST)
+    public CommonResult<Boolean> deleteFriend(@Valid @RequestBody DeleteFriendParam deleteFriendParam){
+        return CommonResult.success(userAuditInfoService.deleteFriendService(ThreadContext.getLoginToken().getUserId(),deleteFriendParam));
     }
 }
