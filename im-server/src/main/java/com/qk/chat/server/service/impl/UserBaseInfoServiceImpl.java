@@ -60,12 +60,12 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
      * @return
      */
     @Override
-    public String emailRegisterService(EmailRegisterParam emailRegisterParam) {
+    public boolean emailRegisterService(EmailRegisterParam emailRegisterParam) {
         Asserts.isTrue(this.checkMailExist(emailRegisterParam.getEmail()), ConstantError.MAILBOX_EXISTS_REGISTER);
         Asserts.isTrue(!emailRegisterParam.getPassword().equals(emailRegisterParam.getConfirmPassword()),ConstantError.VERIFY_PASS_FAULT);
         Asserts.isTrue(!this.checkEmailCode(emailRegisterParam.getEmail(),emailRegisterParam.getCaptcha()),ConstantError.VERIFY_CODE_FAULT);
         this.doRegister(emailRegisterParam);
-        return "注册成功";
+        return true;
     }
 
     /**

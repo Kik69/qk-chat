@@ -26,9 +26,9 @@ public interface UserAuditInfoService extends IService<UserAuditInfo> {
      */
     UserFriendApplyVO findFriendService(FindUserSecretParam findUserSecretParam);
     
-    String applyFriendService(FriendApplyParam friendApplyParam);
+    boolean applyFriendService(String userId,FriendApplyParam friendApplyParam);
 
     List<UserAuditInfo> friendListService(String userId,Integer pageNum,Integer pageSize,String keyword);
     
-    String auditApplyService(AuditApplyParam auditApplyParam);
+    boolean auditApplyService(String userId,AuditApplyParam auditApplyParam);
 }

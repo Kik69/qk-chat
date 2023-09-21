@@ -29,7 +29,7 @@ public class UserBaseInfoController {
     UserBaseInfoService userBaseInfoService;
 
     @PostMapping("/email-register")
-    public CommonResult<String> emailRegister(@Valid @RequestBody EmailRegisterParam emailRegisterParam) {
+    public CommonResult<Boolean> emailRegister(@Valid @RequestBody EmailRegisterParam emailRegisterParam) {
         return CommonResult.success(userBaseInfoService.emailRegisterService(emailRegisterParam));
     }
 

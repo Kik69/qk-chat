@@ -68,22 +68,21 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     }
 
     @Override
-    public String applyFriendService(FriendApplyParam friendApplyParam) {
-        //查看是否有好友关系
-        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),friendApplyParam.getAuditId()).size() > 0, ConstantError.FIND_EXIST_USER_RELA);
-        Asserts.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),friendApplyParam.getAuditId()).size() > 0,ConstantError.NOT_IS_REPEAT_APPLY);
+    public boolean applyFriendService(String userId,FriendApplyParam friendApplyParam) {
+        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),userId).size() > 0, ConstantError.FIND_EXIST_USER_RELA);
+        Asserts.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendApplyParam.getApplyId(),userId).size() > 0,ConstantError.NOT_IS_REPEAT_APPLY);
         UserAuditInfo userAuditInfo = UserAuditInfo.builder()
                 .id(UUID.randomUUID().toString())
                 .userId(friendApplyParam.getApplyId())
                 .businessType(friendApplyParam.getBusinessType())
-                .businessId(friendApplyParam.getAuditId())
+                .businessId(userId)
                 .applyTime(new Date())
-                .auditUserId(friendApplyParam.getAuditId())
+                .auditUserId(userId)
                 .applyReason(friendApplyParam.getApplyReason())
                 .auditStatus(0)
                 .build();
         userAuditInfoMapper.insert(userAuditInfo);
-        return "申请成功";
+        return true;
     }
 
     @Override
@@ -93,23 +92,21 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     }
 
     @Override
-    public String auditApplyService(AuditApplyParam auditApplyParam) {
-        LoginUserInfo loginToken = ThreadContext.getLoginToken();
-        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(loginToken.getUserId(),auditApplyParam.getFriendUserId()).size() > 0,ConstantError.FIND_EXIST_USER_RELA);
-        String auditDetail = auditApplyParam.getAuditDetail();
+    public boolean auditApplyService(String userId,AuditApplyParam auditApplyParam) {
+        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(userId,auditApplyParam.getFriendUserId()).size() > 0,ConstantError.FIND_EXIST_USER_RELA);
         try {
-            if (Constant.IS_NO.equals(auditDetail)){
+            if (Constant.IS_NO.equals(auditApplyParam.getAuditDetail())){
                 //如果是拒绝 修改状态审核是按
-                userAuditInfoMapper.editTurnAuditStatus(loginToken.getUserId(),new Date(),auditApplyParam.getAuditReason());
-            }else {
-                userAuditInfoMapper.editPassAuditStatus(loginToken.getUserId(),new Date(),auditApplyParam.getAuditReason());
-                //增加好友关系
+                userAuditInfoMapper.editTurnAuditStatus(userId,new Date(),auditApplyParam.getAuditReason());
+            }
+            if (Constant.IS_YES.equals(auditApplyParam.getAuditDetail())){
+                userAuditInfoMapper.editPassAuditStatus(userId,new Date(),auditApplyParam.getAuditReason());
                 this.doCreateRelationInfo(auditApplyParam);
             }
-            return "审核成功";
+            return true;
         }catch (Exception e){
             e.printStackTrace();
-            return "审核失败";
+            return false;
         }
     }
     
