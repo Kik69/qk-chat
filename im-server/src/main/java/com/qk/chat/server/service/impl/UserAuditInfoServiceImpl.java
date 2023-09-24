@@ -117,7 +117,8 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     public boolean deleteFriendService(String userId, DeleteFriendParam deleteFriendParam) {
         //判断是否存在好友关系
         Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(userId,deleteFriendParam.getFriendUserId()).size() < 1, ConstantError.NOT_EXIST_FRIEND_RELA);
-        if (userRelationInfoMapper.deleteFriend(userId,deleteFriendParam.getFriendUserId())){
+        if (userRelationInfoMapper.deleteFriend(userId,deleteFriendParam.getFriendUserId()) 
+                && userRelationInfoMapper.deleteFriend(deleteFriendParam.getFriendUserId(),userId)){
             return true;
         }
         return false;
