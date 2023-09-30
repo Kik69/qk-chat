@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qk.chat.server.mapper.QunMemberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qk.chat.server.domain.entity.QunMember">
+        <id column="id" property="id" />
+        <result column="qun_id" property="qunId" />
+        <result column="member_id" property="memberId" />
+        <result column="apply_time" property="applyTime" />
+        <result column="audit_time" property="auditTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, qun_id, member_id, apply_time, audit_time
+    </sql>
+
+</mapper>

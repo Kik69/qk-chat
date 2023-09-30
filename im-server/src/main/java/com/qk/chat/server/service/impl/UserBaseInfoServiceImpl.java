@@ -127,11 +127,7 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
     public boolean checkMailExist(String emailText){
         QueryWrapper<UserBaseInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("email",emailText);
-        List<UserBaseInfo> userInfos = userInfoMapper.selectList(queryWrapper);
-        if (TextUtil.isNotNull(userInfos)){
-            return true;
-        }
-        return false;
+        return TextUtil.isNotNull(userInfoMapper.selectList(queryWrapper));
     }
 
     /**
