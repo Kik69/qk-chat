@@ -4,8 +4,9 @@ package com.qk.chat.server.controller;
 import com.qk.chat.common.result.CommonResult;
 import com.qk.chat.server.domain.param.NewQunParam;
 import com.qk.chat.server.service.QunInfoService;
+import com.qk.chat.web.context.LoginUserInfo;
+import com.qk.chat.web.context.ThreadContext;
 import io.swagger.annotations.ApiOperation;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,8 +35,8 @@ public class QunInfoController {
     @ApiOperation("新建群")
     @RequestMapping(value = "/new-qun",method = RequestMethod.POST)
     public CommonResult<Boolean> newQunInfo(@Valid @RequestBody NewQunParam newQunParam){
-        
-        return null;
+        LoginUserInfo loginToken = ThreadContext.getLoginToken();
+        return CommonResult.success(qunInfoService.newQunInfoService(newQunParam,loginToken.getUserId()));
     }
 }
 
