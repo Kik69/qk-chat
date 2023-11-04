@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qk.chat.server.mapper.ImFriendshipMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qk.chat.server.domain.entity.ImFriendshipInfo">
+        <id column="id" property="id" />
+        <id column="from_id" property="fromId" />
+        <id column="to_id" property="toId" />
+        <result column="remark" property="remark" />
+        <result column="status" property="status" />
+        <result column="black" property="black" />
+        <result column="create_time" property="createTime" />
+        <result column="friend_sequence" property="friendSequence" />
+        <result column="black_sequence" property="blackSequence" />
+        <result column="add_source" property="addSource" />
+        <result column="extra" property="extra" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, from_id, to_id, remark, status, black, create_time, friend_sequence, black_sequence, add_source, extra
+    </sql>
+    
+    <select id="getFriendOneInfo" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from im_friendship_info where from_id = #{fromId} and to_id = #{toId}
+    </select>
+    
+    <insert id="insertFriendInfo">
+            insert into im_friendship_info (
+            id,
+            from_id,
+            to_id,
+            remark,
+            status,
+            black,
+            create_time,
+            friend_sequence,
+            black_sequence,
+            add_source,
+            extra
+        ) values 
+          <foreach item="data" collection="friendList" separator=",">
+              (#{data.id},
+              #{data.from_id},
+              #{data.to_id},
+              #{data.remark},
+              #{data.status},
+              #{data.black},
+              #{data.create_time},
+              #{data.friend_sequence},
+              #{data.black_sequence},
+              #{data.add_source},
+              #{data.extra})
+          </foreach>
+    </insert>
+
+</mapper>

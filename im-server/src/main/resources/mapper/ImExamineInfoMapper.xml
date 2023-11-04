@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qk.chat.server.mapper.ImExamineInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qk.chat.server.domain.entity.ImExamineInfo">
+        <id column="id" property="id" />
+        <result column="app_id" property="appId" />
+        <result column="from_id" property="fromId" />
+        <result column="to_id" property="toId" />
+        <result column="remark" property="remark" />
+        <result column="read_status" property="readStatus" />
+        <result column="add_source" property="addSource" />
+        <result column="add_wording" property="addWording" />
+        <result column="approve_status" property="approveStatus" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="sequence" property="sequence" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, app_id, from_id, to_id, remark, read_status, add_source, add_wording, approve_status, create_time, update_time, sequence
+    </sql>
+
+    <select id="getExamineInfo" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from im_examine_info where from_id = #{fromId} and to_id = #{toId}
+    </select>
+
+    <select id="getImExamineInfoList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM im_examine_info WHERE to_id = #{userId} <if test="keyword != null"> AND remark LIKE '%${keyword}%' </if>
+    </select>
+</mapper>

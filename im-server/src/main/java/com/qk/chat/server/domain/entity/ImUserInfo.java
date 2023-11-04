@@ -22,8 +22,8 @@ import java.util.Date;
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("user_base_info")
-public class UserBaseInfo implements Serializable {
+@TableName("im_user_info")
+public class ImUserInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -93,8 +93,8 @@ public class UserBaseInfo implements Serializable {
     /**
      * 是否激活
      */
-    @TableField("activate")
-    private String activate;
+    @TableField("activate_status")
+    private Integer activateStatus;
 
     /**
      * 激活时间
@@ -156,5 +156,22 @@ public class UserBaseInfo implements Serializable {
     @TableField("gmt_modified")
     private Date gmtModified;
 
+    /**
+     * 好友验证类型
+     */
+    @TableField("friend_allow_type")
+    private Integer friendAllowType;
+
+    /**
+     * 禁烟标识
+     */
+    @TableField("forbidden_flag")
+    private Integer forbiddenFlag;
+
+    /**
+     * 用户类型
+     */
+    @TableField("user_type")
+    private Integer userType;
 
 }

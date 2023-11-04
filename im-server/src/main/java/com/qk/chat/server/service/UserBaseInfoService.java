@@ -2,7 +2,7 @@ package com.qk.chat.server.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qk.chat.server.domain.dto.LoginUser;
-import com.qk.chat.server.domain.entity.UserBaseInfo;
+import com.qk.chat.server.domain.entity.ImUserInfo;
 import com.qk.chat.server.domain.param.CheckLoginParam;
 import com.qk.chat.server.domain.param.EmailRegisterParam;
 
@@ -14,7 +14,7 @@ import com.qk.chat.server.domain.param.EmailRegisterParam;
  * @author young
  * @since 2023年08月27日
  */
-public interface UserBaseInfoService extends IService<UserBaseInfo> {
+public interface UserBaseInfoService extends IService<ImUserInfo> {
     boolean emailRegisterService(EmailRegisterParam emailRegisterParam);
     
     String sendEmailService(String emailText);

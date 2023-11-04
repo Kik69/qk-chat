@@ -20,9 +20,7 @@ import java.util.List;
 public interface UserAuditInfoMapper extends BaseMapper<UserAuditInfo> {
     List<UserAuditInfo> getUserAuditInfoList(@Param("userId") String userId,@Param("keyword") String keyword);
     
-    int editTurnAuditStatus(@Param("auditUserId") String auditUserId,@Param("auditTime") Date auditTime,@Param("auditReason") String auditReason);
+    int editTurnAuditStatus(@Param("status") Integer status, @Param("auditUserId") String auditUserId,@Param("auditTime") Date auditTime,@Param("auditReason") String auditReason);
     
-    int editPassAuditStatus(@Param("auditUserId") String auditUserId,@Param("auditTime") Date auditTime,@Param("auditReason") String auditReason);
     
-    int insertRelationInfo();
 }

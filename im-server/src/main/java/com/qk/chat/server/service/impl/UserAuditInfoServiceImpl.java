@@ -6,24 +6,21 @@ import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.Constant;
 import com.qk.chat.common.constant.ConstantError;
 
-import com.qk.chat.common.constant.GlobalModule;
 import com.qk.chat.server.common.exception.Asserts;
 import com.qk.chat.server.dao.UserAuditInfoDao;
 import com.qk.chat.server.dao.UserRelationInfoDao;
 import com.qk.chat.server.domain.entity.UserRelationInfo;
 import com.qk.chat.server.domain.param.AuditApplyParam;
 import com.qk.chat.server.domain.param.DeleteFriendParam;
+import com.qk.chat.server.domain.param.FriendAddParam;
 import com.qk.chat.server.mapper.UserAuditInfoMapper;
-import com.qk.chat.server.mapper.UserBaseInfoMapper;
+import com.qk.chat.server.mapper.ImUserInfoMapper;
 import com.qk.chat.server.domain.entity.UserAuditInfo;
-import com.qk.chat.server.domain.entity.UserBaseInfo;
+import com.qk.chat.server.domain.entity.ImUserInfo;
 import com.qk.chat.server.domain.param.FindUserSecretParam;
-import com.qk.chat.server.domain.param.FriendApplyParam;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
 import com.qk.chat.server.mapper.UserRelationInfoMapper;
 import com.qk.chat.server.service.UserAuditInfoService;
-import com.qk.chat.web.context.LoginUserInfo;
-import com.qk.chat.web.context.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +40,7 @@ import java.util.UUID;
 public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, UserAuditInfo> implements UserAuditInfoService {
 
     @Autowired
-    UserBaseInfoMapper userInfoMapper;
+    ImUserInfoMapper userInfoMapper;
     
     @Autowired
     UserAuditInfoMapper userAuditInfoMapper;
@@ -59,32 +56,32 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     
     @Override
     public UserFriendApplyVO findFriendService(FindUserSecretParam findUserSecretParam) {
-        UserBaseInfo userBaseInfo = userInfoMapper.getUserBaseInfo(findUserSecretParam.getUserIdentify());
-        Asserts.isTrue(TextUtil.isNull(userBaseInfo), ConstantError.FIND_USER_IS_EXISTS);
+        ImUserInfo imUserInfo = userInfoMapper.getUserBaseInfo(findUserSecretParam.getUserIdentify());
+        Asserts.isTrue(TextUtil.isNull(imUserInfo), ConstantError.FIND_USER_IS_EXISTS);
         return UserFriendApplyVO.builder()
-                .userId(userBaseInfo.getUserId())
-                .nickName(userBaseInfo.getNickName())
-                .userSecretIdentify(userBaseInfo.getEmail())
-                .avatar(userBaseInfo.getAvatar())
+                .userId(imUserInfo.getUserId())
+                .nickName(imUserInfo.getNickName())
+                .userSecretIdentify(imUserInfo.getEmail())
+                .avatar(imUserInfo.getAvatar())
                 .build();
     }
 
     @Override
-    public boolean applyFriendService(String userId,FriendApplyParam friendApplyParam) {
-        Asserts.isTrue(userId.equals(friendApplyParam.getAuditId()),ConstantError.NOT_ADD_ONESELF_FRIEND);
-        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(friendApplyParam.getAuditId(),userId).size() > 0, ConstantError.FIND_EXIST_USER_RELA);
-        Asserts.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendApplyParam.getAuditId(),userId).size() > 0,ConstantError.NOT_IS_REPEAT_APPLY);
-        UserAuditInfo userAuditInfo = UserAuditInfo.builder()
-                .id(UUID.randomUUID().toString())
-                .userId(userId)
-                .businessType(friendApplyParam.getBusinessType())
-                .businessId(friendApplyParam.getAuditId())
-                .applyTime(new Date())
-                .auditUserId(friendApplyParam.getAuditId())
-                .applyReason(friendApplyParam.getApplyReason())
-                .auditStatus(0)
-                .build();
-        userAuditInfoMapper.insert(userAuditInfo);
+    public boolean applyFriendService(String userId, FriendAddParam friendAddParam) {
+//        Asserts.isTrue(userId.equals(friendAddParam.getAuditId()),ConstantError.NOT_ADD_ONESELF_FRIEND);
+//        Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(friendAddParam.getAuditId(),userId).size() > 0, ConstantError.FIND_EXIST_USER_RELA);
+//        Asserts.isTrue(userAuditInfoDao.checkExistsFriendRelation(friendAddParam.getAuditId(),userId).size() > 0,ConstantError.NOT_IS_REPEAT_APPLY);
+//        UserAuditInfo userAuditInfo = UserAuditInfo.builder()
+//                .id(UUID.randomUUID().toString())
+//                .userId(userId)
+//                .businessType(friendAddParam.getBusinessType())
+//                .businessId(friendAddParam.getAuditId())
+//                .applyTime(new Date())
+//                .auditUserId(friendAddParam.getAuditId())
+//                .applyReason(friendAddParam.getApplyReason())
+//                .auditStatus(0)
+//                .build();
+//        userAuditInfoMapper.insert(userAuditInfo);
         return true;
     }
 
@@ -97,20 +94,14 @@ public class UserAuditInfoServiceImpl extends ServiceImpl<UserAuditInfoMapper, U
     @Override
     public boolean auditApplyService(String userId,AuditApplyParam auditApplyParam) {
         Asserts.isTrue(userRelationInfoDao.checkExistsFriendRelation(userId,auditApplyParam.getFriendUserId()).size() > 0,ConstantError.FIND_EXIST_USER_RELA);
-        try {
-            if (Constant.IS_NO.equals(auditApplyParam.getAuditDetail())){
-                //如果是拒绝 修改状态审核是按
-                userAuditInfoMapper.editTurnAuditStatus(userId,new Date(),auditApplyParam.getAuditReason());
-            }
-            if (Constant.IS_YES.equals(auditApplyParam.getAuditDetail())){
-                userAuditInfoMapper.editPassAuditStatus(userId,new Date(),auditApplyParam.getAuditReason());
-                this.doCreateRelationInfo(userId,auditApplyParam);
-            }
+        if (Constant.IS_NO.equals(auditApplyParam.getAuditDetail())){
+            //如果是拒绝 修改状态审核是按
+            userAuditInfoMapper.editTurnAuditStatus(2,userId,new Date(),auditApplyParam.getAuditReason());
             return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
         }
+        userAuditInfoMapper.editTurnAuditStatus(1,userId,new Date(),auditApplyParam.getAuditReason());
+        this.doCreateRelationInfo(userId,auditApplyParam);
+        return true;
     }
 
     @Override

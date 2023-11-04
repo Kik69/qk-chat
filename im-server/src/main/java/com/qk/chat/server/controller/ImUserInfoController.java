@@ -23,7 +23,7 @@ import javax.validation.constraints.NotBlank;
 @RestController
 @RequestMapping("/server/user")
 @Validated
-public class UserBaseInfoController {
+public class ImUserInfoController {
 
     @Autowired
     UserBaseInfoService userBaseInfoService;
@@ -41,10 +41,5 @@ public class UserBaseInfoController {
     @PostMapping("/email-login")
     public CommonResult<LoginUser> checkLogin(@Valid @RequestBody CheckLoginParam checkLoginParam){
         return CommonResult.success(userBaseInfoService.checkLoginService(checkLoginParam),"登录成功！");
-    }
-    
-    @GetMapping("/test")
-    public CommonResult<String> test(){
-        return CommonResult.success("test");
     }
 }

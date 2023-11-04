@@ -8,17 +8,18 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.Constant;
 import com.qk.chat.common.constant.ConstantError;
+import com.qk.chat.common.enmu.RegisterTypeEnum;
 import com.qk.chat.common.jwt.JwtUtils;
 import com.qk.chat.server.common.config.redis.RedisToolsUtil;
 import com.qk.chat.server.common.event.LoginSendCodeEvent;
 import com.qk.chat.server.common.exception.Asserts;
 import com.qk.chat.server.common.exception.BusinessException;
-import com.qk.chat.server.mapper.UserBaseInfoMapper;
+import com.qk.chat.server.mapper.ImUserInfoMapper;
 import com.qk.chat.server.domain.dto.LoginUser;
 import com.qk.chat.server.domain.param.CheckLoginParam;
 import com.qk.chat.server.domain.param.EmailRegisterParam;
 import com.qk.chat.server.service.UserBaseInfoService;
-import com.qk.chat.server.domain.entity.UserBaseInfo;
+import com.qk.chat.server.domain.entity.ImUserInfo;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -27,7 +28,6 @@ import org.springframework.stereotype.Service;
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,13 +39,13 @@ import java.util.concurrent.TimeUnit;
  * @since 2023年08月27日
  */
 @Service
-public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, UserBaseInfo> implements UserBaseInfoService {
+public class UserBaseInfoServiceImpl extends ServiceImpl<ImUserInfoMapper, ImUserInfo> implements UserBaseInfoService {
     
     @Autowired
     RedisToolsUtil redisToolsUtil;
     
     @Autowired
-    UserBaseInfoMapper userInfoMapper;
+    ImUserInfoMapper userInfoMapper;
     
     @Autowired
     StringEncryptor stringEncryptor;
@@ -90,7 +90,8 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
      */
     @Override
     public LoginUser checkLoginService(CheckLoginParam checkLoginParam) {
-        UserBaseInfo userInfo = this.getUserInfo(checkLoginParam.getEmail());
+        ImUserInfo userInfo = this.getUserInfo(checkLoginParam.getEmail());
+        Asserts.isTrue(userInfo.getActivateStatus().equals(RegisterTypeEnum.IM_ZERO.getCode()),ConstantError.USER_ACTIVE_FORBIDDEN);
         Asserts.isTrue(!this.checkMailExist(checkLoginParam.getEmail()),ConstantError.USER_ERROR);
         Asserts.isTrue(!stringEncryptor.decrypt(userInfo.getPassword()).equals(checkLoginParam.getPassword()),ConstantError.USER_ERROR);
         String token = JwtUtils.generateToken(Constant.PREFIX_UID + checkLoginParam.getEmail(),userInfo.getUserId());
@@ -108,8 +109,8 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
     }
 
 
-    public UserBaseInfo getUserInfo(String emailText){
-        QueryWrapper<UserBaseInfo> queryWrapper = new QueryWrapper<>();
+    public ImUserInfo getUserInfo(String emailText){
+        QueryWrapper<ImUserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("email",emailText);
         return userInfoMapper.selectOne(queryWrapper);
     }
@@ -125,7 +126,7 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
      * 判断邮箱是否存在
      */
     public boolean checkMailExist(String emailText){
-        QueryWrapper<UserBaseInfo> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<ImUserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("email",emailText);
         return TextUtil.isNotNull(userInfoMapper.selectList(queryWrapper));
     }
@@ -135,20 +136,19 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<UserBaseInfoMapper, Use
      */
     public void doRegister(EmailRegisterParam registerParam){
         try {
-            UserBaseInfo userInfo = new UserBaseInfo();
+            ImUserInfo userInfo = new ImUserInfo();
             userInfo.setUserId(UUID.randomUUID().toString());
             userInfo.setUserName(registerParam.getUserName());
             userInfo.setPassword(stringEncryptor.encrypt(registerParam.getPassword()));
             userInfo.setEmail(registerParam.getEmail());
-            userInfo.setActivate(Constant.IS_YES);
+            userInfo.setActivateStatus(RegisterTypeEnum.IM_ONE.getCode());
             userInfo.setActivateTime(new DateTime());
             userInfo.setIp(InetAddress.getLocalHost().getHostAddress());
             userInfo.setStatus(1);
             userInfo.setGmtCreate(new DateTime());
             userInfoMapper.insert(userInfo);
         }catch (Exception e) {
-            e.printStackTrace();
-            throw new BusinessException(ConstantError.VERIFY_CODE_FAULT);
+            throw new BusinessException(ConstantError.SYSTEM_ERROR);
         }
     }
 }

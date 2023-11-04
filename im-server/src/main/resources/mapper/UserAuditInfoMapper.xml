@@ -26,11 +26,6 @@
     </select>
     
     <update id="editTurnAuditStatus">
-        UPDATE user_audit_info SET audit_status = 2, audit_time = #{auditTime,jdbcType=DATE},audit_reason = #{auditReason} WHERE user_id = #{auditUserId}
+        UPDATE user_audit_info SET audit_status = #{status}, audit_time = #{auditTime,jdbcType=DATE},audit_reason = #{auditReason} WHERE user_id = #{auditUserId}
     </update>
-
-    <update id="editPassAuditStatus">
-        UPDATE user_audit_info SET audit_status = 1, audit_time = #{auditTime,jdbcType=DATE},audit_reason = #{auditReason} WHERE user_id = #{auditUserId}
-    </update>
-
 </mapper>

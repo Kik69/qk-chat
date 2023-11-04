@@ -49,7 +49,6 @@ public class LoginSendCodeListener implements ApplicationListener<LoginSendCodeE
             //存入redis
             redisToolsUtil.set(Constant.PREFIX_KEY_EMAIL + emailText,code,600);
         }catch (Exception e){
-            e.printStackTrace();
             throw new BusinessException(ConstantError.SYSTEM_ERROR);
         }
     }

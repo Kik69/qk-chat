@@ -1,27 +1,29 @@
 package com.qk.chat.server.domain.param;
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  * {@code @ClassName} FriendApplyParam
  * {@code @Description} TODO
  * {@code @Author} ZYL
- * {@code @Date} 2023/9/5 17:13
+ * {@code @Date} 2023/11/2 16:51
  */
 @Data
-@Builder
 public class FriendApplyParam {
-    @NotBlank(message = "审核人不为空")
-    private String auditId;
-    @NotBlank(message = "业务类型不为空")
-    private String businessType;
-    @NotBlank(message = "业务ID不为空")
-    private String businessId;
-    private Date applyTime;
-    @NotBlank(message = "申请理由不为空")
-    private String applyReason;
+    @NotBlank(message = "申请人不为空")
+    private String fromId;
+    
+    @NotBlank(message = "好友验证信息不为空")
+    private String addWording;
+    
+    @NotNull(message = "审核结果不为空")
+    private Integer approveStatus;
+    
+    private String remark;
+    
+    private Date updateTime;
 }
