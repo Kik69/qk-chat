@@ -3,6 +3,7 @@ package com.qk.chat.server.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
 import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.ConstantError;
 import com.qk.chat.common.enmu.RegisterTypeEnum;
@@ -10,8 +11,12 @@ import com.qk.chat.server.common.exception.Asserts;
 import com.qk.chat.server.domain.entity.ImExamineInfo;
 import com.qk.chat.server.domain.entity.ImFriendshipInfo;
 import com.qk.chat.server.domain.entity.ImUserInfo;
+import com.qk.chat.server.domain.param.FindUserSecretParam;
 import com.qk.chat.server.domain.param.FriendAddParam;
 import com.qk.chat.server.domain.param.FriendApplyParam;
+import com.qk.chat.server.domain.param.FriendDeleteParam;
+import com.qk.chat.server.domain.vo.UserFriendApplyVO;
+import com.qk.chat.server.domain.vo.UserFriendListVO;
 import com.qk.chat.server.mapper.ImExamineInfoMapper;
 import com.qk.chat.server.mapper.ImFriendshipMapper;
 import com.qk.chat.server.mapper.ImUserInfoMapper;
@@ -23,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -93,6 +97,35 @@ public class ImFriendshipServiceImpl extends ServiceImpl<ImFriendshipMapper, ImF
         return true;
     }
 
+    @Override
+    public UserFriendApplyVO findFriendService(FindUserSecretParam findUserSecretParam) {
+        ImUserInfo imUserInfo = imUserInfoMapper.getUserBaseInfo(findUserSecretParam.getUserIdentify());
+        Asserts.isTrue(TextUtil.isNull(imUserInfo), ConstantError.FIND_USER_IS_EXISTS);
+        return UserFriendApplyVO.builder()
+                .userId(imUserInfo.getUserId())
+                .nickName(imUserInfo.getNickName())
+                .userSecretIdentify(imUserInfo.getEmail())
+                .avatar(imUserInfo.getAvatar())
+                .build();
+    }
+
+    @Override
+    public boolean deleteFriendService(FriendDeleteParam deleteParam) {
+        LoginUserInfo loginToken = ThreadContext.getLoginToken();
+        ImFriendshipInfo friendOneInfo = imFriendshipMapper.getFriendOneInfo(loginToken.getUserId(), deleteParam.getToId());
+        Asserts.isTrue(TextUtil.isNull(friendOneInfo),ConstantError.DATA_ERROR);
+        imFriendshipMapper.editFriendStatus(loginToken.getUserId(), deleteParam.getToId());
+        return true;
+    }
+
+    @Override
+    public List<UserFriendListVO> listFriendService(Integer pageNum, Integer pageSize, String keyword) {
+        PageHelper.startPage(pageNum,pageSize);
+        LoginUserInfo loginToken = ThreadContext.getLoginToken();
+        List<String> friendToIds = imFriendshipMapper.getFriendToIds(loginToken.getUserId());
+        return imUserInfoMapper.getUserFriendList(friendToIds,keyword);
+    }
+
     public void doCreateFriendRecord(FriendAddParam friendAddParam,String userId){
         List<ImFriendshipInfo> friendList = new ArrayList<>();
         ImFriendshipInfo imFriendshipInfo = new ImFriendshipInfo();
@@ -130,5 +163,19 @@ public class ImFriendshipServiceImpl extends ServiceImpl<ImFriendshipMapper, ImF
         imExamineInfo.setAddSource(friendAddParam.getAddSource());
         imExamineInfo.setApproveStatus(RegisterTypeEnum.IM_THREE.getCode());
         imExamineInfoMapper.insert(imExamineInfo);
+    }
+    
+    public UserFriendListVO assignToFriend(ImUserInfo userInfoById){
+        UserFriendListVO userFriendListVO = new UserFriendListVO();
+        userFriendListVO.setUserName(userFriendListVO.getUserName());
+        userFriendListVO.setNickName(userFriendListVO.getNickName());
+        userFriendListVO.setEmail(userFriendListVO.getEmail());
+        userFriendListVO.setGender(userFriendListVO.getGender());
+        userFriendListVO.setAvatar(userFriendListVO.getAvatar());
+        userFriendListVO.setBirthday(userFriendListVO.getBirthday());
+        userFriendListVO.setMobile(userFriendListVO.getMobile());
+        userFriendListVO.setLastLoginTime(userFriendListVO.getLastLoginTime());
+        userFriendListVO.setPersonalSignature(userFriendListVO.getPersonalSignature());
+        return userFriendListVO;
     }
 }

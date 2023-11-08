@@ -20,4 +20,9 @@ public interface ImFriendshipMapper extends BaseMapper<ImFriendshipInfo> {
     ImFriendshipInfo getFriendOneInfo(@Param("fromId") String fromId,@Param("toId") String toId);
     
     int insertFriendInfo(@Param("friendList") List<ImFriendshipInfo> friendList);
+
+    int editFriendStatus(@Param("fromId") String fromId,@Param("toId") String toId);
+    
+    List<String> getFriendToIds(String fromId);
+    
 }

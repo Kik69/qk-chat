@@ -43,4 +43,14 @@
     <select id="getUserInfoById" resultMap="BaseResultMap">
         SELECT * FROM im_user_info WHERE user_id = #{userId}
     </select>
+    
+    <select id="getUserFriendList" resultType="com.qk.chat.server.domain.vo.UserFriendListVO">
+        select * from im_user_info where user_id in 
+        <foreach collection="userIds" item="userId" separator="," open="(" close=")">
+            #{userId}
+        </foreach>
+        <if test="keyword != null">
+            and email like '%${keyword}%'
+        </if>
+    </select>
 </mapper>

@@ -54,5 +54,13 @@
               #{data.extra})
           </foreach>
     </insert>
+    
+    <update id="editFriendStatus">
+        update im_friendship_info set status = 2 where from_id = #{fromId} and to_id = #{toId}
+    </update>
+    
+    <select id="getFriendToIds" resultType="java.lang.String">
+        select to_id from im_friendship_info where from_id = #{fromId}
+    </select>
 
 </mapper>

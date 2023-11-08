@@ -2,10 +2,12 @@ package com.qk.chat.server.controller;
 
 
 import com.qk.chat.common.result.CommonResult;
-import com.qk.chat.server.common.pager.CommonPage;
-import com.qk.chat.server.domain.entity.UserAuditInfo;
+import com.qk.chat.server.domain.param.FindUserSecretParam;
 import com.qk.chat.server.domain.param.FriendAddParam;
 import com.qk.chat.server.domain.param.FriendApplyParam;
+import com.qk.chat.server.domain.param.FriendDeleteParam;
+import com.qk.chat.server.domain.vo.UserFriendApplyVO;
+import com.qk.chat.server.domain.vo.UserFriendListVO;
 import com.qk.chat.server.service.impl.ImFriendshipServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * <p>
@@ -41,6 +44,26 @@ public class ImFriendshipController {
     @RequestMapping(value = "apply-friend",method = RequestMethod.POST)
     public CommonResult<Boolean> applyFriend(@Valid @RequestBody FriendApplyParam friendApplyParam) {
         return CommonResult.success(imFriendshipService.applyFriendService(friendApplyParam));
+    }
+
+    @ApiOperation("查找好友")
+    @RequestMapping(value = "/find-friend", method = RequestMethod.POST)
+    public CommonResult<UserFriendApplyVO> findFriend(@Valid @RequestBody FindUserSecretParam findUserSecretParam) {
+        return CommonResult.success(imFriendshipService.findFriendService(findUserSecretParam));
+    }
+
+    @ApiOperation("删除好友")
+    @RequestMapping(value = "/delete-friend", method = RequestMethod.POST)
+    public CommonResult<Boolean> deleteFriend(@Valid @RequestBody FriendDeleteParam friendDeleteParam) {
+        return CommonResult.success(imFriendshipService.deleteFriendService(friendDeleteParam));
+    }
+
+    @ApiOperation("好友列表")
+    @RequestMapping(value = "/list-friend", method = RequestMethod.POST)
+    public CommonResult<List<UserFriendListVO>> listFriend(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                           @RequestParam(required = false) String keyword) {
+        return CommonResult.success(imFriendshipService.listFriendService(pageNum,pageSize,keyword));
     }
 }
 
