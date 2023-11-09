@@ -20,6 +20,7 @@ import com.qk.chat.server.domain.param.CheckLoginParam;
 import com.qk.chat.server.domain.param.EmailRegisterParam;
 import com.qk.chat.server.service.UserBaseInfoService;
 import com.qk.chat.server.domain.entity.ImUserInfo;
+import io.lettuce.core.RedisConnectionException;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -96,7 +97,7 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<ImUserInfoMapper, ImUse
         Asserts.isTrue(!stringEncryptor.decrypt(userInfo.getPassword()).equals(checkLoginParam.getPassword()),ConstantError.USER_ERROR);
         String token = JwtUtils.generateToken(Constant.PREFIX_UID + checkLoginParam.getEmail(),userInfo.getUserId());
         //存入redis 设置过期时间
-        redisToolsUtil.set(Constant.PREFIX_UID + checkLoginParam.getEmail(),token,30,TimeUnit.MINUTES);
+        Asserts.isTrue(!redisToolsUtil.set(Constant.PREFIX_UID + checkLoginParam.getEmail(),token,30,TimeUnit.MINUTES),ConstantError.SYSTEM_ERROR);
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("token",token);
         return LoginUser.builder()

@@ -11,10 +11,8 @@ import com.qk.chat.server.common.exception.Asserts;
 import com.qk.chat.server.domain.entity.ImExamineInfo;
 import com.qk.chat.server.domain.entity.ImFriendshipInfo;
 import com.qk.chat.server.domain.entity.ImUserInfo;
-import com.qk.chat.server.domain.param.FindUserSecretParam;
-import com.qk.chat.server.domain.param.FriendAddParam;
-import com.qk.chat.server.domain.param.FriendApplyParam;
-import com.qk.chat.server.domain.param.FriendDeleteParam;
+import com.qk.chat.server.domain.param.*;
+import com.qk.chat.server.domain.vo.FriendRelationVO;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
 import com.qk.chat.server.domain.vo.UserFriendListVO;
 import com.qk.chat.server.mapper.ImExamineInfoMapper;
@@ -28,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -123,7 +122,35 @@ public class ImFriendshipServiceImpl extends ServiceImpl<ImFriendshipMapper, ImF
         PageHelper.startPage(pageNum,pageSize);
         LoginUserInfo loginToken = ThreadContext.getLoginToken();
         List<String> friendToIds = imFriendshipMapper.getFriendToIds(loginToken.getUserId());
+        if (TextUtil.isNull(friendToIds)){
+            return null;
+        }
         return imUserInfoMapper.getUserFriendList(friendToIds,keyword);
+    }
+
+    public List<FriendRelationVO> verifyFriendRelation(CheckFriendParam param) {
+        String userId = ThreadContext.getLoginToken().getUserId();
+        if (param.getCheckType() == RegisterTypeEnum.IM_ONE.getCode()){
+            // 单向验证
+            return getFriendRelationsByType(param, userId, true);
+        }
+        if (param.getCheckType() == RegisterTypeEnum.IM_TWO.getCode()){
+            // 双向验证
+            return getFriendRelationsByType(param, userId, false);
+        }
+        return Collections.emptyList();
+    }
+
+    /**
+     * 根据类型获取好友关系列表
+     * @param param 验证好友参数
+     * @param userId 用户ID
+     * @param isOneWayCheck 是否单向检测
+     * @return 好友关系视图对象列表
+     */
+    private List<FriendRelationVO> getFriendRelationsByType(CheckFriendParam param, String userId, boolean isOneWayCheck){
+        return isOneWayCheck ? imFriendshipMapper.getOneWayCheckList(param, userId)
+                : imFriendshipMapper.getBothWayCheckList(param, userId);
     }
 
     public void doCreateFriendRecord(FriendAddParam friendAddParam,String userId){
@@ -163,19 +190,5 @@ public class ImFriendshipServiceImpl extends ServiceImpl<ImFriendshipMapper, ImF
         imExamineInfo.setAddSource(friendAddParam.getAddSource());
         imExamineInfo.setApproveStatus(RegisterTypeEnum.IM_THREE.getCode());
         imExamineInfoMapper.insert(imExamineInfo);
-    }
-    
-    public UserFriendListVO assignToFriend(ImUserInfo userInfoById){
-        UserFriendListVO userFriendListVO = new UserFriendListVO();
-        userFriendListVO.setUserName(userFriendListVO.getUserName());
-        userFriendListVO.setNickName(userFriendListVO.getNickName());
-        userFriendListVO.setEmail(userFriendListVO.getEmail());
-        userFriendListVO.setGender(userFriendListVO.getGender());
-        userFriendListVO.setAvatar(userFriendListVO.getAvatar());
-        userFriendListVO.setBirthday(userFriendListVO.getBirthday());
-        userFriendListVO.setMobile(userFriendListVO.getMobile());
-        userFriendListVO.setLastLoginTime(userFriendListVO.getLastLoginTime());
-        userFriendListVO.setPersonalSignature(userFriendListVO.getPersonalSignature());
-        return userFriendListVO;
     }
 }

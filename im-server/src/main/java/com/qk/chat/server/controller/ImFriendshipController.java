@@ -2,10 +2,8 @@ package com.qk.chat.server.controller;
 
 
 import com.qk.chat.common.result.CommonResult;
-import com.qk.chat.server.domain.param.FindUserSecretParam;
-import com.qk.chat.server.domain.param.FriendAddParam;
-import com.qk.chat.server.domain.param.FriendApplyParam;
-import com.qk.chat.server.domain.param.FriendDeleteParam;
+import com.qk.chat.server.domain.param.*;
+import com.qk.chat.server.domain.vo.FriendRelationVO;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
 import com.qk.chat.server.domain.vo.UserFriendListVO;
 import com.qk.chat.server.service.impl.ImFriendshipServiceImpl;
@@ -64,6 +62,12 @@ public class ImFriendshipController {
                                                            @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
                                                            @RequestParam(required = false) String keyword) {
         return CommonResult.success(imFriendshipService.listFriendService(pageNum,pageSize,keyword));
+    }
+
+    @ApiOperation("校验好友")
+    @RequestMapping(value = "/check-friend", method = RequestMethod.POST)
+    public CommonResult<List<FriendRelationVO>> checkFriend(@Valid @RequestBody CheckFriendParam checkFriendParam){
+        return CommonResult.success(imFriendshipService.verifyFriendRelation(checkFriendParam));
     }
 }
 

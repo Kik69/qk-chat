@@ -3,10 +3,8 @@ package com.qk.chat.server.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qk.chat.server.domain.entity.ImExamineInfo;
 import com.qk.chat.server.domain.entity.ImFriendshipInfo;
-import com.qk.chat.server.domain.param.FindUserSecretParam;
-import com.qk.chat.server.domain.param.FriendAddParam;
-import com.qk.chat.server.domain.param.FriendApplyParam;
-import com.qk.chat.server.domain.param.FriendDeleteParam;
+import com.qk.chat.server.domain.param.*;
+import com.qk.chat.server.domain.vo.FriendRelationVO;
 import com.qk.chat.server.domain.vo.UserFriendApplyVO;
 import com.qk.chat.server.domain.vo.UserFriendListVO;
 
@@ -30,4 +28,6 @@ public interface ImFriendshipService extends IService<ImFriendshipInfo> {
     boolean deleteFriendService(FriendDeleteParam deleteParam);
 
     List<UserFriendListVO> listFriendService(Integer pageNum,Integer pageSize,String keyword);
+    
+    List<FriendRelationVO> verifyFriendRelation(CheckFriendParam checkFriendParam);
 }

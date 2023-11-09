@@ -63,4 +63,33 @@
         select to_id from im_friendship_info where from_id = #{fromId}
     </select>
 
+    <select id="getOneWayCheckList" resultType="com.qk.chat.server.domain.vo.FriendRelationVO">
+        SELECT from_id AS fromId,to_id AS toId, if(status = 1,1,0) as status
+        FROM im_friendship_info
+        WHERE from_id = #{fromId} AND to_id IN
+        <foreach collection="checkFriendParam.toIds" item="toId" separator="," open="(" close=")">
+            #{toId}
+        </foreach>
+    </select>
+    
+    <select id="getBothWayCheckList" resultType="com.qk.chat.server.domain.vo.FriendRelationVO">
+        SELECT a.fromId,a.toId,(CASE WHEN a.`status` = 1 AND b.`status` = 1 THEN 1
+                                     WHEN a.`status` = 1 AND b.`status` != 1 THEN 2
+                                     WHEN a.`status` != 1 AND b.`status` = 1 THEN 3
+                                     WHEN a.`status` != 1 AND b.`status` != 1 THEN 4 END) AS `status`
+        FROM (SELECT from_id AS fromId,to_id AS toId, IF(status = 1,1,0) `status` 
+                FROM im_friendship_info WHERE from_id  = #{fromId} AND to_id IN 
+                    <foreach collection="checkFriendParam.toIds" item="toId" separator="," open="(" close=")">
+                        #{toId}
+                    </foreach>
+             ) a JOIN
+             (SELECT from_id AS fromId,to_id AS toId, IF(status = 1,1,0) `status` 
+              FROM im_friendship_info WHERE to_id  = #{fromId} AND from_id IN
+                    <foreach collection="checkFriendParam.toIds" item="toId" separator="," open="(" close=")">
+                        #{toId}
+                    </foreach>
+            ) b
+            ON a.fromId = b.toId AND a.toId = b.fromId
+    </select>
+
 </mapper>

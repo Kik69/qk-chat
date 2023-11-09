@@ -2,6 +2,8 @@ package com.qk.chat.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qk.chat.server.domain.entity.ImUserInfo;
+import com.qk.chat.server.domain.param.CheckFriendParam;
+import com.qk.chat.server.domain.vo.FriendRelationVO;
 import com.qk.chat.server.domain.vo.UserFriendListVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
