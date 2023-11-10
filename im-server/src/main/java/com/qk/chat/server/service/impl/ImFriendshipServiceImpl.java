@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -132,13 +133,44 @@ public class ImFriendshipServiceImpl extends ServiceImpl<ImFriendshipMapper, ImF
         String userId = ThreadContext.getLoginToken().getUserId();
         if (param.getCheckType() == RegisterTypeEnum.IM_ONE.getCode()){
             // 单向验证
-            return getFriendRelationsByType(param, userId, true);
+            return this.addExistsFriend(param.getToIds(),this.getFriendRelationsByType(param,userId,true),userId);
         }
         if (param.getCheckType() == RegisterTypeEnum.IM_TWO.getCode()){
             // 双向验证
-            return getFriendRelationsByType(param, userId, false);
+            return this.addExistsFriend(param.getToIds(),this.getFriendRelationsByType(param,userId,false),userId);
         }
+        
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean blackFriendService(FriendBlackParam friendBlackParam) {
+        String userId = ThreadContext.getLoginToken().getUserId();
+        ImFriendshipInfo friendOneInfo = imFriendshipMapper.getFriendOneInfo(userId, friendBlackParam.getToId());
+        Asserts.isTrue(userId.equals(friendBlackParam.getToId()),ConstantError.NOT_BLACK_SELF);
+        Asserts.isTrue(TextUtil.isNull(friendOneInfo),ConstantError.NOT_EXIST_USER_RELA);
+        Asserts.isTrue(friendOneInfo.getBlack() == RegisterTypeEnum.IM_TWO.getCode(),ConstantError.ALREADY_BLACK_EXISTS);
+        ImFriendshipInfo imFriendshipInfo = new ImFriendshipInfo();
+        imFriendshipInfo.setId(friendOneInfo.getId());
+        imFriendshipInfo.setBlack(RegisterTypeEnum.IM_TWO.getCode());
+        imFriendshipMapper.updateById(imFriendshipInfo);
+        return true;
+    }
+
+    public List<FriendRelationVO> addExistsFriend(List<String> toIds,List<FriendRelationVO> params,String userId){
+        List<FriendRelationVO> newParams = toIds.stream()
+                .filter(s -> !params.stream().map(FriendRelationVO::getToId).collect(Collectors.toList()).contains(s))
+                .map(s -> {
+                    FriendRelationVO relationVO = new FriendRelationVO();
+                    relationVO.setFromId(userId);
+                    relationVO.setToId(s);
+                    relationVO.setStatus(0);
+                    return relationVO;
+                })
+                .collect(Collectors.toList());
+        params.addAll(newParams);
+        return params;
+
     }
 
     /**

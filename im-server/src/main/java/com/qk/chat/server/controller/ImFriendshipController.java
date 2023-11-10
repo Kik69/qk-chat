@@ -69,5 +69,12 @@ public class ImFriendshipController {
     public CommonResult<List<FriendRelationVO>> checkFriend(@Valid @RequestBody CheckFriendParam checkFriendParam){
         return CommonResult.success(imFriendshipService.verifyFriendRelation(checkFriendParam));
     }
+    
+    @ApiOperation("拉黑好友")
+    @RequestMapping(value = "/black-friend", method = RequestMethod.POST)
+    public CommonResult<Boolean> blackFriend(@Valid @RequestBody FriendBlackParam friendBlackParam){
+        return CommonResult.success(imFriendshipService.blackFriendService(friendBlackParam));
+    }
+
 }
 

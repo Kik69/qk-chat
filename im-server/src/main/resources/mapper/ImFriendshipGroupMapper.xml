@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qk.chat.server.mapper.ImFriendshipGroupMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qk.chat.server.domain.entity.ImFriendshipGroup">
+        <id column="group_id" property="groupId" />
+        <result column="app_id" property="appId" />
+        <result column="from_id" property="fromId" />
+        <result column="group_name" property="groupName" />
+        <result column="sequence" property="sequence" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="del_flag" property="delFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        group_id, app_id, from_id, group_name, sequence, create_time, update_time, del_flag
+    </sql>
+    
+    <select id="getAllByGroupNameList" resultType="java.lang.String">
+        SELECT group_name FROM im_friendship_group WHERE from_id = #{fromId}
+    </select>
+
+</mapper>

@@ -30,4 +30,6 @@ public interface ImFriendshipService extends IService<ImFriendshipInfo> {
     List<UserFriendListVO> listFriendService(Integer pageNum,Integer pageSize,String keyword);
     
     List<FriendRelationVO> verifyFriendRelation(CheckFriendParam checkFriendParam);
+    
+    boolean blackFriendService(FriendBlackParam friendBlackParam);
 }
