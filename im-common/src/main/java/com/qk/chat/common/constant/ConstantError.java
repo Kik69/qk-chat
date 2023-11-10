@@ -10,6 +10,7 @@ public enum ConstantError implements ErrorSupport{
     FIND_USER_IS_EXISTS(false,GlobalModule.GLOBAL,"01","查无此人，请确认邮箱是否正确!"),
     
     FIND_EXIST_USER_RELA(false,GlobalModule.GLOBAL,"01","存在好友关系!"),
+    NOT_EXIST_USER_RELA(false,GlobalModule.GLOBAL,"01","不存在好友关系!"),
     NOT_EXIST_FRIEND_RELA(false,GlobalModule.GLOBAL,"01","not exists friend relation!"),
     NOT_ADD_ONESELF_FRIEND(false,GlobalModule.GLOBAL,"01","不能添加自己!"),
     
@@ -24,9 +25,12 @@ public enum ConstantError implements ErrorSupport{
     SYSTEM_ERROR(false,GlobalModule.GLOBAL,"01","系统内部异常，请联系管理员处理!"),
     USER_ERROR(false,GlobalModule.GLOBAL,"01","用户名或密码错误!"),
     USER_ACTIVE_FORBIDDEN(false,GlobalModule.GLOBAL,"01","用户已禁用，请联系管理员处理!"),
-    TARGET_BLACK_EXISTS(false,GlobalModule.GLOBAL,"01","您已被对方拉入黑名单!"),
+    DATA_ERROR(false,GlobalModule.GLOBAL,"01","数据异常!"),
+    TARGET_BLACK_EXISTS(false,GlobalModule.GLOBAL,"02","您已被对方拉入黑名单!"),
+    ALREADY_BLACK_EXISTS(false,GlobalModule.GLOBAL,"02","该好友已经被你拉黑!"),
+    NOT_BLACK_SELF(false,GlobalModule.GLOBAL,"02","不能拉黑自己!"),
+    EXISTS_GROUP(false,GlobalModule.GLOBAL,"03","已经存在该分组!")
     
-    DATA_ERROR(false,GlobalModule.GLOBAL,"01","数据异常!")
     ;
     private boolean system;
     private ModuleSupport module;
