@@ -28,7 +28,7 @@ public class ImFriendshipGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "group_id", type = IdType.AUTO)
+    @TableField(value = "group_id")
     private String groupId;
 
     /**

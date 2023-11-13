@@ -22,5 +22,9 @@
     <select id="getAllByGroupNameList" resultType="java.lang.String">
         SELECT group_name FROM im_friendship_group WHERE from_id = #{fromId}
     </select>
+    
+    <insert id="addGroupMemberData">
+        INSERT INTO im_group_member (`group_id`,`to_id`) values (#{groupId},#{toIds})
+    </insert>
 
 </mapper>

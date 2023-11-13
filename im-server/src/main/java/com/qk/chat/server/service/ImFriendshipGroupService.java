@@ -2,7 +2,8 @@ package com.qk.chat.server.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qk.chat.server.domain.entity.ImFriendshipGroup;
-import com.qk.chat.server.domain.param.FriendGroupParam;
+import com.qk.chat.server.domain.param.FriendGroupAddParam;
+import com.qk.chat.server.domain.param.FriendGroupEditParam;
 
 /**
  * <p>
@@ -13,5 +14,7 @@ import com.qk.chat.server.domain.param.FriendGroupParam;
  * @since 2023年11月10日
  */
 public interface ImFriendshipGroupService extends IService<ImFriendshipGroup> {
-    boolean createGroupService(FriendGroupParam friendGroupParam);
+    boolean createGroupService(FriendGroupAddParam friendGroupAddParam);
+
+    boolean editGroupService(FriendGroupEditParam friendGroupEditParam);
 }
