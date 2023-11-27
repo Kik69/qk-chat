@@ -2,10 +2,10 @@ package com.qk.chat.server.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
-import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.Constant;
 import com.qk.chat.common.constant.ConstantError;
 
+import com.qk.chat.common.utils.TextUtil;
 import com.qk.chat.server.common.exception.Asserts;
 import com.qk.chat.server.dao.UserAuditInfoDao;
 import com.qk.chat.server.dao.UserRelationInfoDao;

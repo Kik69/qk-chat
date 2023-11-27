@@ -5,11 +5,11 @@ import cn.hutool.core.lang.UUID;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.Constant;
 import com.qk.chat.common.constant.ConstantError;
 import com.qk.chat.common.enmu.RegisterTypeEnum;
 import com.qk.chat.common.jwt.JwtUtils;
+import com.qk.chat.common.utils.TextUtil;
 import com.qk.chat.server.common.config.redis.RedisToolsUtil;
 import com.qk.chat.server.common.event.LoginSendCodeEvent;
 import com.qk.chat.server.common.exception.Asserts;

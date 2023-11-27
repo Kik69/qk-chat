@@ -3,9 +3,9 @@ package com.qk.chat.server.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.constant.ConstantError;
 import com.qk.chat.common.enmu.RegisterTypeEnum;
+import com.qk.chat.common.utils.TextUtil;
 import com.qk.chat.server.common.exception.Asserts;
 import com.qk.chat.server.domain.entity.ImFriendshipGroup;
 import com.qk.chat.server.domain.param.FriendGroupAddParam;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * <p>
