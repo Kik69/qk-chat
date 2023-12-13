@@ -47,8 +47,8 @@ public class ImFriendshipGroupServiceImpl extends ServiceImpl<ImFriendshipGroupM
         ImFriendshipGroup imFriendshipGroup = imFriendshipGroupMapper.selectById(friendGroupEditParam.getGroupId());
         Asserts.isTrue(TextUtil.isNull(imFriendshipGroup),ConstantError.NOT_EXISTS_GROUP);
         if (friendGroupEditParam.getIsType() == RegisterTypeEnum.IM_ZERO.getCode()){
-            //修改分组信息 删除分组成员或者修改名称
             ImFriendshipGroup friendshipGroup = new ImFriendshipGroup();
+            //修改分组信息 删除分组成员或者修改名称
             friendshipGroup.setGroupId(friendGroupEditParam.getGroupId());
             if (TextUtil.isNotNull(friendGroupEditParam.getGroupName())) friendshipGroup.setGroupName(friendshipGroup.getGroupName());
             friendshipGroup.setUpdateTime(new DateTime());
@@ -56,8 +56,11 @@ public class ImFriendshipGroupServiceImpl extends ServiceImpl<ImFriendshipGroupM
         }
         if (friendGroupEditParam.getIsType() == RegisterTypeEnum.IM_ONE.getCode()){
             // 向分组内添加新的成员
+            String groupId = friendGroupEditParam.getGroupId();
+            List<String> toIds = friendGroupEditParam.getToIds();
+            toIds.forEach(toId -> imFriendshipGroupMapper.addGroupMemberData(groupId,toId));
         }
-        return false;
+        return true;
     }
 
     public String doCreateGroup(FriendGroupAddParam friendGroupAddParam, String userId){
@@ -73,6 +76,6 @@ public class ImFriendshipGroupServiceImpl extends ServiceImpl<ImFriendshipGroupM
     }
     
     public void addGroupMember(String groupId,List<String> toIds){
-        toIds.stream().forEach(toId -> imFriendshipGroupMapper.addGroupMemberData(groupId,toId));
+        toIds.forEach(toId -> imFriendshipGroupMapper.addGroupMemberData(groupId,toId));
     }
 }

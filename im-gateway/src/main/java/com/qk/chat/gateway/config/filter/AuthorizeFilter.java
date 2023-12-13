@@ -1,7 +1,7 @@
 package com.qk.chat.gateway.config.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.inspur.plugins.common.util.TextUtil;
+import com.qk.chat.common.utils.TextUtil;
 import com.qk.chat.gateway.config.redis.RedisToolsUtil;
 import com.qk.chat.common.jwt.JwtUtils;
 import io.jsonwebtoken.Claims;

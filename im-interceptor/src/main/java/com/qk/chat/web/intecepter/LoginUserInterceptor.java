@@ -1,7 +1,7 @@
 package com.qk.chat.web.intecepter;
 
-import com.inspur.plugins.common.util.TextUtil;
 import com.qk.chat.common.jwt.JwtUtils;
+import com.qk.chat.common.utils.TextUtil;
 import com.qk.chat.web.context.LoginUserInfo;
 import com.qk.chat.web.context.ThreadContext;
 import io.jsonwebtoken.Claims;
