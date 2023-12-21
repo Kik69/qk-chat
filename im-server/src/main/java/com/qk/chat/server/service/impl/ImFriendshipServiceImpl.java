@@ -208,7 +208,7 @@ public class ImFriendshipServiceImpl extends ServiceImpl<ImFriendshipMapper, ImF
         imFriendTargetInfo.setAddSource(friendAddParam.getAddSource());
         friendList.add(imFriendshipInfo);
         friendList.add(imFriendTargetInfo);
-        friendList.stream().forEach(friend -> imFriendshipMapper.insert(friend));
+        friendList.forEach(friend -> imFriendshipMapper.insert(friend));
     }
     
     public void doCreateApplyRecord(FriendAddParam friendAddParam,String userId){

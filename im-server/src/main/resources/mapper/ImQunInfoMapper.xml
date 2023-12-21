@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qk.chat.server.mapper.ImQunInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qk.chat.server.domain.entity.ImQunInfoEntity">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="announcement" property="announcement" />
+        <result column="nationality_id" property="nationalityId" />
+        <result column="organization_id" property="organizationId" />
+        <result column="owner_id" property="ownerId" />
+        <result column="category_id" property="categoryId" />
+        <result column="remark" property="remark" />
+        <result column="status" property="status" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="gmt_create" property="gmtCreate" />
+        <result column="modified_user_id" property="modifiedUserId" />
+        <result column="gmt_modified" property="gmtModified" />
+        <result column="create_user_name" property="createUserName" />
+        <result column="modified_user_name" property="modifiedUserName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, announcement, nationality_id, organization_id, owner_id, category_id, remark, status, create_user_id, gmt_create, modified_user_id, gmt_modified, create_user_name, modified_user_name
+    </sql>
+
+</mapper>

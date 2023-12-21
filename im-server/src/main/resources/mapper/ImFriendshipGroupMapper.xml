@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.qk.chat.server.domain.entity.ImFriendshipGroup">
-        <id column="group_id" property="groupId" />
+        <id column="group_id" property="id" />
         <result column="app_id" property="appId" />
         <result column="from_id" property="fromId" />
         <result column="group_name" property="groupName" />
@@ -16,7 +16,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        group_id, app_id, from_id, group_name, sequence, create_time, update_time, del_flag
+        id, app_id, from_id, group_name, sequence, create_time, update_time, del_flag
     </sql>
     
     <select id="getAllByGroupNameList" resultType="java.lang.String">
@@ -27,4 +27,7 @@
         INSERT INTO im_group_member (`group_id`,`to_id`) values (#{groupId},#{toIds})
     </insert>
 
+    <select id="getGroupMemberInfo" resultType="com.qk.chat.server.domain.entity.ImGroupMember">
+        SELECT * FROM im_group_member WHERE group_id = #{groupId} AND to_id = #{toId}
+    </select>
 </mapper>

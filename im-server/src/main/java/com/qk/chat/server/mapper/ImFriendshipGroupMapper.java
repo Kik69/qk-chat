@@ -2,6 +2,7 @@ package com.qk.chat.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qk.chat.server.domain.entity.ImFriendshipGroup;
+import com.qk.chat.server.domain.entity.ImGroupMemberEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,4 +21,6 @@ public interface ImFriendshipGroupMapper extends BaseMapper<ImFriendshipGroup> {
     List<String> getAllByGroupNameList(String fromId);
     
     int addGroupMemberData(@Param("groupId") String groupId,@Param("toIds") String toIds);
+
+    List<ImGroupMemberEntity> getGroupMemberInfo(@Param("groupId") String groupId, @Param("toId") String toId);
 }

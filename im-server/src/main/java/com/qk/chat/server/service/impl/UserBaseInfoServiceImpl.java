@@ -97,7 +97,7 @@ public class UserBaseInfoServiceImpl extends ServiceImpl<ImUserInfoMapper, ImUse
         Asserts.isTrue(!stringEncryptor.decrypt(userInfo.getPassword()).equals(checkLoginParam.getPassword()),ConstantError.USER_ERROR);
         String token = JwtUtils.generateToken(Constant.PREFIX_UID + checkLoginParam.getEmail(),userInfo.getUserId());
         //存入redis 设置过期时间
-        Asserts.isTrue(!redisToolsUtil.set(Constant.PREFIX_UID + checkLoginParam.getEmail(),token,30,TimeUnit.MINUTES),ConstantError.SYSTEM_ERROR);
+        Asserts.isTrue(!redisToolsUtil.set(Constant.PREFIX_UID + checkLoginParam.getEmail(),token,60,TimeUnit.MINUTES),ConstantError.SYSTEM_ERROR);
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("token",token);
         return LoginUser.builder()

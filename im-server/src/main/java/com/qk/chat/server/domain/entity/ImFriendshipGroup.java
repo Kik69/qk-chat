@@ -28,8 +28,8 @@ public class ImFriendshipGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField(value = "group_id")
-    private String groupId;
+    @TableField(value = "id")
+    private String id;
 
     /**
      * app_id

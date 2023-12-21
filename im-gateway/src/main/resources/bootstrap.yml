@@ -13,3 +13,7 @@ spring:
         namespace: qk-chat
   profiles:
     active: dev
+  redis:
+    port: 6379
+    password: admin
+    host: 120.27.134.110

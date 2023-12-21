@@ -30,7 +30,7 @@ public enum ConstantError implements ErrorSupport{
     ALREADY_BLACK_EXISTS(false,GlobalModule.GLOBAL,"02","该好友已经被你拉黑!"),
     NOT_BLACK_SELF(false,GlobalModule.GLOBAL,"02","不能拉黑自己!"),
     EXISTS_GROUP(false,GlobalModule.GLOBAL,"03","已经存在该分组!"),
-    NOT_EXISTS_GROUP(false,GlobalModule.GLOBAL,"03","已经存在该分组!")
+    NOT_EXISTS_GROUP(false,GlobalModule.GLOBAL,"03","分组不存在!")
     
     ;
     private boolean system;

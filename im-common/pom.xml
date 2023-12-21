@@ -104,11 +104,6 @@
 <!--            <version>2.1.0.RELEASE</version>-->
 <!--        </dependency>-->
         <dependency>
-            <groupId>com.inspur</groupId>
-            <artifactId>oService-common</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
             <version>3.0.3</version>

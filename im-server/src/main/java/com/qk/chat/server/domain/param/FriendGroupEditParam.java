@@ -16,14 +16,8 @@ import java.util.List;
 @Data
 public class FriendGroupEditParam {
     @NotBlank(message = "主键ID不为空")
-    private String groupId;
-    
+    private String id;
+
+    @NotBlank(message = "分组名称不为空")
     private String groupName;
-    
-    @NotNull(message = "操作类型不为空")
-    private Integer isType; //0 修改 1添加
-    
-    @NotEmpty(message = "操作对象不为空")
-    private List<String> toIds;
-    
 }
