@@ -13,6 +13,8 @@
         <module>im-common</module>
         <module>im-gateway</module>
         <module>im-interceptor</module>
+        <module>im-tcp</module>
+        <module>im-codec</module>
     </modules>
 
     <properties>
